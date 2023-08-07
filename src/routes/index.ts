@@ -13,12 +13,12 @@ router.get('/', function (req, res) {
 });
 
 /* GET login page. */
-router.get('/login', function (req, res) {
-  // render view from views/login.ejs
-  res.render('login', {
-    error: '',
-  });
-});
+// router.get('/login', function (req, res) {
+//   // render view from views/login.ejs
+//   res.render('index', {
+//     error: '',
+//   });
+// });
 
 /* GET signup page. */
 router.get('/signup', function (req, res) {
