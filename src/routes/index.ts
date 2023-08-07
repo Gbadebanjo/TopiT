@@ -27,6 +27,14 @@ router.get('/signup', function (req, res) {
   return res.json("render signup page");
 });
 
+/* GET contact page. */
+router.get('/contact', function (req, res) {
+  // render view from views/login.ejs
+  res.render('contact', {
+    error: '',
+  });
+});
+
 // admin and users can SIGNUP and LOGIN from these routes
 router.post('/admin/signup', controller.signup);
 router.post('/signup', controller.signup);
