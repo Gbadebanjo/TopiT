@@ -1,0 +1,95 @@
+.container {
+    display: flex;
+    max-width: 1000px;
+    margin: 20px auto;
+  }
+  
+  .signUpImage {
+    flex: 1;
+    padding: 10px;
+    background-color: #f8f8f8;
+    display: flex;
+    align-items: center;
+  }
+  
+  .signUpImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .details {
+    flex: 2;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Form heading */
+  h1 {
+    margin-bottom: 20px;
+    color: #007bff;
+  }
+  
+  /* Form input fields */
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Form buttons */
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #d0e1da;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  button[type="submit"] {
+    background-color: #28a745;
+  }
+  
+  .signin{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .signin a{
+   margin-left: -100px;
+   text-decoration: none;
+   color: #28a745;
+  }
+  /* Error message */
+  .error-message {
+    color: red;
+    font-size: 12px;
+  }
+  

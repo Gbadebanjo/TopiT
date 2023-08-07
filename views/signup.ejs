@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/stylesheets/signup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="signUpImage">
+            <!-- Placeholder for a responsive signup page image -->
+            <img src="img/officeimage.jpg" alt="Office Background Image">
+        </div class="details">
+        <div>
+            <h1>Create an account</h1> 
+            <h2>Sign up now to enjoy endless transactions</h2>
+            
+            <form action="/signup" method="post">
+                <!-- Name input  -->
+                <label for="name">Your name</label>
+                <input type="text" id="name" placeholder="First Last" required> 
+
+                <!-- Email input -->
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="you@email.com" required> 
+
+                <!-- Password input  -->
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                
+                <br>
+                <!-- Create account button -->
+                <button type="submit">Create Account</button>
+                <!-- Sign in button -->
+                <div class="signin">
+                  <p>Already have an account?</p>
+                  <a href="#">Sign In</a>
+                </div>
+               
+            </form>
+        </div>
+    </div>
+</body>
+</html>
