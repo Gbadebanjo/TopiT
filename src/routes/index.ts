@@ -24,7 +24,9 @@ router.get('/', function (req, res) {
 router.get('/signup', function (req, res) {
   // render view from views/signup.ejs
   // res.render('signup', {});
-  return res.json("render signup page");
+  res.render('signup', {
+    error: '',
+  });
 });
 
 /* GET contact page. */
