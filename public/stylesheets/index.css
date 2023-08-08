@@ -278,19 +278,20 @@ footer {
   height: 50vh;
 }
 
-.float {
-  text-overflow: inherit;
+.float a {
+  /* text-overflow: inherit; */
   text-align: justify;
   padding-left: 450px;
-  font-size: 100px;
-  text-decoration: underline;
+  margin-bottom: 100px;
+  font-size: 15px;
   color: white;
+  text-decoration: none;
 }
 
-.a:hover {
-  color: orangered;
+.a {
+  color: black;
   font-size: 30px;
-  text-decoration: none;
+  margin-bottom: 90px;
 }
 
 .Rec {
