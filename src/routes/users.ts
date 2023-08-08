@@ -12,6 +12,7 @@ router.post("/login", controller.login);
 // topit/account/
 router.put("/",  controller.updateUser);
 router.delete("/", controller.deleteUser);
+
 router.get('/users', controller.getAllUsers);
 router.get('/dashboard', controller.dashboard)
 

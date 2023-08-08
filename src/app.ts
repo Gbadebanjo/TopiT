@@ -11,7 +11,7 @@ import * as dotenv from 'dotenv';
 import * as auth from "./middlewares/auth";
 
 // synchronize database
-db.sync().then(() => {
+db.sync({ 'force': false }).then(() => {
   console.log("database synced successfully!");
 }).catch(error => {
   console.log("error syncing db", error);
@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/', indexRouter);
 app.use('/', usersRouter);
-app.use('/account', auth.authenticate, auth.authorize, usersRouter);
+app.use('/account', auth.authenticate, auth.authorization, usersRouter);
 app.use('/account/transaction', transactionsRouter);
 
 // catch 404 and forward to error handler

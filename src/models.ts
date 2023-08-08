@@ -47,24 +47,18 @@ Transaction.init({
     type: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  network: {
+  amount: {
     type: DataTypes.STRING,
   },
-  amount: {
+  type: {
     type: DataTypes.NUMBER,
   },
-  phoneNumber: {
+  description: {
     type: DataTypes.STRING,
-  },
-  rechargeType:{
-    type: DataTypes.STRING   // airtime, data, cabletv, electricity
   },
   date: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
-  },
-  description: {
-    type: DataTypes.STRING,
   },
   userId: {
     type: DataTypes.UUIDV4,
@@ -74,29 +68,29 @@ Transaction.init({
   tableName: "Transactions",
 });
 
-export class FundingAccount extends Model { };
-FundingAccount.init({
-  id: {
-    type: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  bank: {
-    type: DataTypes.STRING,
-    defaultValue: 'Topidus Bank'
-  },
-  number: {
-    type: DataTypes.STRING
-  },
-  name: {
-    type: DataTypes.STRING,
-  },
-  userId: {
-    type: DataTypes.UUIDV4
-  }
-}, {
-  sequelize: db,
-  tableName: "FundingAccounts"
-})
+// export class FundingAccount extends Model { };
+// FundingAccount.init({
+//   id: {
+//     type: DataTypes.UUIDV4,
+//     primaryKey: true,
+//   },
+//   bank: {
+//     type: DataTypes.STRING,
+//     defaultValue: 'Topidus Bank'
+//   },
+//   number: {
+//     type: DataTypes.STRING
+//   },
+//   name: {
+//     type: DataTypes.STRING,
+//   },
+//   userId: {
+//     type: DataTypes.UUIDV4
+//   }
+// }, {
+//   sequelize: db,
+//   tableName: "FundingAccounts"
+// })
 
 Transaction.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Transaction, { foreignKey: 'userId', as: 'transactions' });
