@@ -1,46 +1,41 @@
 import express from 'express';
-import * as controller from "../controllers/user"
 
 const router = express.Router();
 
 /* GET home page. */
 router.get('/', function (req, res) {
   // render view from views/index.ejs
-  res.render('index', {
-    title: 'TOPIT RECHARGE APP',
-    value: 'check check 1, 2, 3, testing'
-  });
+  res.render('index', {});
 });
 
 /* GET login page. */
 // router.get('/login', function (req, res) {
 //   // render view from views/login.ejs
-//   res.render('index', {
-//     error: '',
-//   });
+//   res.render('login', {});
 // });
 
 /* GET signup page. */
 router.get('/signup', function (req, res) {
   // render view from views/signup.ejs
-  // res.render('signup', {});
-  res.render('signup', {
-    error: '',
-  });
+  res.render('signup', {});
 });
 
 /* GET contact page. */
 router.get('/contact', function (req, res) {
-  // render view from views/login.ejs
-  res.render('contact', {
-    error: '',
-  });
+  // render view from views/contact.ejs
+  res.render('contact', {});
 });
 
-// admin and users can SIGNUP and LOGIN from these routes
-router.post('/admin/signup', controller.signup);
-router.post('/signup', controller.signup);
-router.post("/login", controller.login);
+/* GET dashboard page. */
+// router.get('/account/dashboard', function (req, res) {
+//   // render view from views/dashboard.ejs
+//   res.render('dashboard', {
+//     username: req.user.username.toUpperCase()
+//     //
+//     // values for ejs
+//     // 
+//   });
+// })
 
 // import router into app.ts
 export default router;

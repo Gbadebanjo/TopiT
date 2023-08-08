@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopiT</title>
+    <link rel="stylesheet" href="/stylesheets/dashboard.css">
+</head>
+<body>
+    <section class="recharge_whole">
+    <section class="nav_section">
+        <nav class="nav_vertical">
+          <h1 class="topit">TopiT</h1>
+          <ul>
+            <li class="navlist"><a href="index.html">Dashboard</a></li>
+            <li class="navlist"><a href="recharge.html">Recharge</a></li>
+            <li class="navlist1"><a href="data.html">Buy data</a></li>
+            <li class="navlist"><a href="transactions.html">Transactions</a></li>
+            <li class="navlist"><a href="addfunds.html">Add funds</a></li>
+            <li class="navlist"><a href="withdraw.html">Withdraw funds</a></li>
+        </ul>
+        </nav>
+        <nav class="nav_btm">
+              <img class="navpix" src="/images/pics icon.jpeg" alt="profilepix">
+              <a href="#"><h4>My Profile</h4></a>
+          </ul>
+        </nav>
+    </section>
+    <section >
+        <nav class="nav_main">   
+            <div class="pix_name">
+                 <img class="top_nav_pix" src="/images/pics icon.jpeg" alt="profilepix">
+                <p>John Doe</p>
+            </div>
+            <a href="#">
+                <button type="submit">LOGOUT</button>
+              </a>
+          </nav>
+    <div class="recharge_page_section2">
+        <div class="recharge_data_pay">
+            <p>Recharge</p> 
+                <div class="recharge_section">
+                    <a class="network_logo_div" href="#">
+                        <img class="network_logo" src="./assets/mtn.png" alt="Mtn_logo">
+                    </a> 
+                    <a class="network_logo_div" href="#">
+                        <img class="network_logo"  src="./assets/airtel.png" alt="Airtel_logo">
+                    </a>
+                    <a class="network_logo_div" href="#">
+                        <img class="network_logo"  src="./assets/glo.png" alt="Glo_logo">
+                    </a>
+                    <a class="network_logo_div" href="#">
+                        <img class="network_logo"  src="./assets/9mobile.png" alt="9mobile_logo">
+                    </a>
+                </div>
+          </div> 
+        <div class="recharge_page_logo">
+            <img src="./images/mtn.png" alt="Line_logo">
+            <h3>Recharge your MTN line</h3>
+        </div>
+        <div class="enter_phone">   
+            <div class="enter">
+                <input type="tel" id="phone_number" placeholder="Enter your phone number to recharge" pattern="[0-9]{11}" required>
+            </div>
+        </div>
+        <div class="choose_amount"></div>
+        <div class="line_or">
+            <hr>
+            <h3>OR</h3>
+            <hr>
+        </div>
+
+        <div class="enter_amount">
+            <div class="enter">
+                <input type="number" id="custom_amount" placeholder="Enter recharge amount">
+            </div>
+        </div>
+
+        <button type="submit">Recharge</button>
+    </div>
+    </section>
+</section>
+    <script src="/javascript/index.js"></script>
+</body>
+</html>
