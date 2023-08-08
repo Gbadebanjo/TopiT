@@ -2,21 +2,23 @@ import { NextFunction, Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
 import { User } from "../models";
 import * as utils from "../utils";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 /**Lists all users in database */
 export async function getAllUsers(req: Request, res: Response) {
-  if (!req.user.isAdmin) {
-    console.log("unauthorized");
-    return res.json({error: 'unauthorized'})
-  }
   try {
-    const allUsers = await User.findAll({ include: [{ all: true }] });
+    if (!req.user.isAdmin) {
+      throw new Error("Unauthorized");
+    }
+    const allUsers = await User.findAll({
+      include: [{ all: true }],
+      attributes: ['username', 'email', 'fullname']
+    });
     return res.json(allUsers);
   }
   catch (error: any) {
-    console.log(error.message);
-    res.redirect('/topit/login/');
+    res.render('error', { error, message: error.message });
   }
 }
 
@@ -59,8 +61,7 @@ export async function signup(req: Request, res: Response) {
     return res.status(201).json({ message: "user created successfully" });
   }
   catch (error: any) {
-    console.log(error.message);
-    res.redirect('/topit/signup/');
+    res.render('error', { error, message: error.message });
   }
 }
 
@@ -72,14 +73,14 @@ export async function updateUser(req: Request, res: Response) {
     if (user) {
       Object.assign(user, { ...user, ...updates });
       await user.save();
+      console.log({ message: "updated successfully", user: user.dataValues })
       return res.json({ message: "updated successfully" });
     } else {
       throw new Error("Unknown user!");
     }
   }
   catch (error: any) {
-    console.log(error.message);
-    res.redirect('/topit/login/');
+    res.render('error', { error, message: error.message });
   }
 }
 
@@ -88,6 +89,7 @@ export async function deleteUser(req: Request, res: Response) {
   try {
     const user = await User.findOne({ where: { id: req.user.id } });
     if (user) {
+      console.log(user.dataValues)
       await user.destroy();
       return res.json({ message: "User deleted successfully" })
     } else {
@@ -95,8 +97,7 @@ export async function deleteUser(req: Request, res: Response) {
     }
   }
   catch (error: any) {
-    console.log(error.message);
-    res.redirect('/topit/login/');
+    res.render('error', { error, message: error.message });
   }
 }
 
@@ -105,57 +106,54 @@ export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     const result = utils.loginValidator.validate(req.body, utils.options);
     if (result.error) {
-      console.log({ message: result.error.details[0].message })
-      return res.status(400).json({ error: "Invalid login details1" });
+      console.log(result.error.details[0].message);
+      return res.status(400).json({ message: "Invalid login details" });
     }
 
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: "Invalid login details2" });
+      console.log('no user with such email');
+      return res.status(400).json({ message: "Invalid login details" });
     }
 
     // Compare the provided password with the hashed password in the database
     const isValidPassword = await bcrypt.compare(password, user.dataValues.password);
     if (!isValidPassword) {
-      return res.status(400).json({ message: "Invalid login details3" });
+      console.log('invalid password')
+      return res.status(400).json({ message: "Invalid login details" });
     }
 
     // give user a token after successful login
-    const { id, username, isAdmin } = user.dataValues;
-    const token = utils.generateToken({ id, isAdmin });
-    req.headers.authorization =  token;
-    req.headers.email = email;
-    req.headers.password = password;
-    // next();
-    console.log({ msg: `Hi ${username}! You are now logged in.` });
-    // res.redirect('account/dashboard')
-    res.json({ message: 'Login successful!', token });
+    const { id } = user.dataValues;
+    const secretKey = process.env.JWT_SECRET as string;
+    const expiresIn = 10 * 60   // in seconds
+    const token = jwt.sign({ id }, secretKey, { expiresIn });
+    // save token as a cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: expiresIn * 1000,  // in milliseconds
+    })
+
+    console.log(`Hi dear! Let's get your dashboard. Redirecting to dashboard page...`);
+    res.redirect('/account/dashboard')
   }
   catch (error: any) {
-    console.log(error.message);
-    res.redirect('/topit/login/');
+    res.status(500);
+    res.render('error', { error, message: error.message });
   }
 }
 
-/*GET user dashboard */
+/*GET user dashboard with information */
 export async function dashboard(req: Request, res: Response) {
-  console.log(req.user)
-  try {
-    const user = await User.findOne({ where: { id: req.user.id } });
-    if (user) {
-      const { username } = user?.dataValues;
-      res.render('dashboard', {
-        username: username.toUpperCase()
-      });
-    } else {
-      throw new Error("Unknown user!");
-    }
-  }
-  catch (error: any) {
-    console.log(error.message);
-    res.redirect('/topit/login/');
-  }
+  const user = req.user;
+  const { username } = user;
+  res.render('dashboard', {
+    username: username.toUpperCase()
+    //
+    // values for ejs
+    // 
+  });
 }
 
 /**Generate random funding account number for user */

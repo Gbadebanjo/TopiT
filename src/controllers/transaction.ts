@@ -3,15 +3,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { Transaction } from "../models";
 
 export async function addTransaction(req: Request, res: Response) {
-  const id = uuidv4();
-  const userId = req.user.id;
-  try {
-    await Transaction.create({ ...req.body, id, userId });
+  // const id = uuidv4();
+  // const userId = req.user.id;
+  // try {
+  //   await Transaction.create({ ...req.body, id, userId });
     res.json({message: "transaction successful"});
-  } catch (error: any) {
-    console.log(error.message);
-    res.status(500).json({ error: 'error in transaction' });
-  }
+  // } catch (error: any) {
+  //   console.log(error.message);
+  //   res.status(500).json({ error: 'error in transaction' });
+  // }
 }
 
 export async function getAllTransactions(req: Request, res: Response) {

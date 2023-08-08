@@ -9,10 +9,9 @@ import usersRouter from './routes/users';
 import transactionsRouter from './routes/transactions';
 import * as dotenv from 'dotenv';
 import * as auth from "./middlewares/auth";
-import { login } from './controllers/user';
 
 // synchronize database
-db.sync().then(() => {
+db.sync({ 'force': false }).then(() => {
   console.log("database synced successfully!");
 }).catch(error => {
   console.log("error syncing db", error);
@@ -23,18 +22,19 @@ dotenv.config();
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, '..', 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
-app.use('/topit/', indexRouter);
-app.use('/topit/account', auth.authenticate, auth.authorize, usersRouter);
-app.use('/topit/account/transaction', transactionsRouter);
+app.use('/', indexRouter);
+app.use('/', usersRouter);
+app.use('/account', auth.authenticate, auth.authorization, usersRouter);
+app.use('/account/transaction', transactionsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
