@@ -76,7 +76,8 @@ export async function fund(req: Request, res: Response) {
     }
   } else {
     console.log('calling controller to show airtime recharge page');
-    res.json({ message: 'showing transactions page', data: user });
-    res.render('fund', {});
+    // res.json({ message: 'showing transactions page', data: user });
+    res.render('addfunds');
   }
+  
 }

@@ -93,8 +93,8 @@ export async function login(req: Request, res: Response) {
     })
 
     console.log(`Hi dear! Let's get your dashboard. Redirecting to dashboard page...`);
-    return res.json({message: "Login successful", data: user.dataValues, token});
-    // res.redirect('/account/dashboard');
+    // return res.json({message: "Login successful", data: user.dataValues, token});
+    res.redirect('/account/dashboard');
   }
   catch (error: any) {
     res.status(500);
