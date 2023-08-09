@@ -9,7 +9,8 @@ export async function getAllTransactions(req: Request, res: Response) {
   console.log('calling controller function to get all transactions');
   try {
     const allTransactions = await Transaction.findAll();
-    res.json(allTransactions)
+    res.render('transactions', {})
+    // res.json(allTransactions)
   } catch (error: any) {
     res.status(500).json(error);
   }
@@ -32,39 +33,50 @@ export async function recharge(req: Request, res: Response) {
     }
   } else {
     console.log('calling controller to show airtime recharge page');
-    res.json({message: 'showing transactions page', data: user});
-    // res.render('recharge', {});
+    // res.json({message: 'showing transactions page', data: user});
+    res.render('recharge', {});
   }
 }
 
 /**GET or POST /account/transaction/fund */
-// export async function fund(req: Request, res: Response) {
-//   const user = req.user.dataValues;
-//   if (req.method === 'POST') {
-//     console.log('calling controller to fund wallet');
-//     const id = uuidv4();
-//     const userId = user.id;
-//     const amount  = req.body.amount;
-//     const serviceProvider = 'Topidus';
-//     const type = 'debit';
-//     const service = 'fund';
-//     const description = `${serviceProvider} ${amount} ${service} ${type}`
-//     try {
-//       // find user funding account
-//       const fundingAccount = await FundingAccount.findOne({ where: { userId } });
-//       const acctBal = fundingAccount?.dataValues.acctBal + amount;
-//       const newTransaction = await Transaction.create({
-//         id: user.id,
-//         type: 'debit',
-//         amount: amount + fundingAccount?.dataValues.acctBal,
-//         // id, userId, description });
-//       res.json({ message: "transaction successful", data: newTransaction });
-//     } catch (error: any) {
-//       res.status(500).json(error);
-//     }
-//   } else {
-//     console.log('calling controller to show airtime recharge page');
-//     res.json({message: 'showing transactions page', data: user});
-//     // res.render('recharge', {});
-//   }
-// }
+export async function fund(req: Request, res: Response) {
+  const user = req.user.dataValues;
+  if (req.method === 'POST') {
+    console.log('calling controller to fund wallet');
+    const id = uuidv4();
+    const userId = user.id;
+    const amount = req.body.amount;
+    const serviceProvider = 'Topidus';
+    const type = 'debit';
+    const service = 'fund';
+    const description = `${serviceProvider} ${amount} ${service} ${type}`
+    try {
+      // find user funding account
+      let fundingAccount = await FundingAccount.findOne({ where: { userId } });
+      if (fundingAccount) {
+        await Transaction.create({
+          id: uuidv4(),
+          type: 'debit',
+          amount,
+          description,
+          service,
+          userId
+        });
+        // update funding account balance
+        await FundingAccount.update(
+          { acctBal: fundingAccount.dataValues.acctBal + amount },
+          { where: { userId } }
+        );
+        fundingAccount = await FundingAccount.findOne({ where: { userId } });
+        res.json({ message: "transaction successful", data: fundingAccount?.dataValues });
+      }
+
+    } catch (error: any) {
+      res.status(500).json(error);
+    }
+  } else {
+    console.log('calling controller to show airtime recharge page');
+    res.json({ message: 'showing transactions page', data: user });
+    res.render('fund', {});
+  }
+}
