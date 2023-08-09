@@ -38,18 +38,14 @@
             <button type="submit">LOGOUT</button>
           </a>
       </nav>
-      <div class="addfunds">
-          <h3>Top up your TopiT wallet</h3>
-        <div class="amount_one">
-          <p>Enter the amount to top up</p>
-          <input type="number" id="topup-amount" placeholder="Amount">
-        </div>
-        <div>
-          <p>Enter the amount to recharge</p>
-          <input type="number" id="recharge-amount" placeholder="Amount">
-        </div>
-        <button type="submit">Top up NGN 500</button>
+      <form class="addfunds" method="post">
+        <h3>Top up your TopiT wallet</h3>
+      <div class="amount_one">
+        <p>Enter the amount to top up</p>
+        <input type="number" id="amount" placeholder="Amount" name="amount">
       </div>
+      <button type="submit">Top up NGN 500</button>
+    </form>
 </section>
 </section>
 </body>
