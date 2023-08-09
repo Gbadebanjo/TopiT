@@ -7,102 +7,106 @@ import jwt from "jsonwebtoken";
 
 /**Lists all users in database */
 export async function getAllUsers(req: Request, res: Response) {
+  console.log('calling controller to get all users');
+  if (!req.user.isAdmin) {
+    return res.status(401).json({ message: 'You are not an admin' })
+  }
   try {
-    if (!req.user.isAdmin) {
-      throw new Error("Unauthorized");
-    }
     const allUsers = await User.findAll({
       include: [{ all: true }],
-      attributes: ['username', 'email', 'fullname']
+      // attributes: ['username', 'email', 'fullname']
     });
     return res.json(allUsers);
   }
   catch (error: any) {
-    res.render('error', { error, message: error.message });
+    res.json(error);
   }
 }
 
 /**create user/admin acct */
 export async function signup(req: Request, res: Response) {
-  console.log(req.url);
+  console.log('calling controller to sign up new user');
   const isAdmin = req.url === '/admin/signup';
-  if (isAdmin) {
-    const admin = await User.findAll({ where: { isAdmin } });
-    if (admin.length > 0) {
-      return res.status(403).json({ error: 'admin already exists' });
-    }
-  }
-
-  // validate user input
-  const result = utils.registerValidator.validate(req.body, utils.options);
-  if (result.error) {
-    console.log({ error: result.error });
-    return res.status(400).json({ error: "invalid input" });
-  }
-
-  // check if user email already exists in database
-  const { email, password } = req.body;
-  const user = await User.findOne({ where: { email } });
-  if (user) {
-    return res.status(400).json({ message: "email already exists!" });
-  }
-
-  // hash user password
-  const hashedPassword = await bcrypt.hash(password, 10);
   try {
+    if (isAdmin) {
+      // try {
+      const admin = await User.findAll({ where: { isAdmin } });
+      if (admin.length > 0) {
+        return res.status(400).json({ message: 'admin already exist!' });
+      }
+    }
+
+    // validate user input
+    const result = utils.registerValidator.validate(req.body, utils.options);
+    if (result.error) {
+      return res.json({ message: "invalid input" });
+    }
+
+    // check if user email already exists in database
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (user) {
+      return res.json({ message: "email already exists!" });
+    }
+
+    // hash user password
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
       ...req.body,
       password: hashedPassword,
       id: uuidv4(),
       isAdmin,
     });
-    console.log('+++SIGNUP SUCCESSFUL+++');
-    console.log({ message: 'user created!', userInfo: newUser.dataValues });
-    return res.status(201).json({ message: "user created successfully" });
-  }
-  catch (error: any) {
-    res.render('error', { error, message: error.message });
+    console.log(newUser)
+    return res.status(201).json({ message: "new user created successfully", data: newUser });
+  } catch (error: any) {
+    res.json(error);
   }
 }
 
 /**edit user acct */
 export async function updateUser(req: Request, res: Response) {
+  console.log('calling controller to update user');
   const updates = req.body;
   try {
     const user = await User.findOne({ where: { id: req.user.id } });
     if (user) {
       Object.assign(user, { ...user, ...updates });
       await user.save();
-      console.log({ message: "updated successfully", user: user.dataValues })
-      return res.json({ message: "updated successfully" });
+      // res.json({ message: 'updated successfully' })
+      return res.redirect('dashboard');
     } else {
-      throw new Error("Unknown user!");
+      res.json({ message: 'kindly login as a user' })
     }
   }
   catch (error: any) {
-    res.render('error', { error, message: error.message });
+    res.json(error);
   }
 }
 
 /**delete user acct */
 export async function deleteUser(req: Request, res: Response) {
+  console.log('calling controller to delete user');
+  if (!req.user) {
+    return res.json({ message: 'kindly login as a user' });
+  }
   try {
     const user = await User.findOne({ where: { id: req.user.id } });
     if (user) {
-      console.log(user.dataValues)
       await user.destroy();
-      return res.json({ message: "User deleted successfully" })
-    } else {
-      throw new Error("Unknown user!");
+      return res.redirect('/signup');
+      // return res.json({ message: "User deleted successfully", user })
     }
   }
   catch (error: any) {
-    res.render('error', { error, message: error.message });
+    console.log(error.message)
+    res.json({ error: 'an error occured' });
   }
 }
 
 /**Login user/admin */
 export async function login(req: Request, res: Response, next: NextFunction) {
+  console.log('calling controller to login user');
   try {
     const result = utils.loginValidator.validate(req.body, utils.options);
     if (result.error) {
@@ -125,10 +129,9 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     }
 
     // give user a token after successful login
-    const { id } = user.dataValues;
     const secretKey = process.env.JWT_SECRET as string;
-    const expiresIn = 10 * 60   // in seconds
-    const token = jwt.sign({ id }, secretKey, { expiresIn });
+    const expiresIn = 3 * 60 * 60   // in seconds
+    const token = jwt.sign({ id: user.dataValues.id }, secretKey, { expiresIn });
     // save token as a cookie
     res.cookie('token', token, {
       httpOnly: true,
@@ -136,7 +139,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     })
 
     console.log(`Hi dear! Let's get your dashboard. Redirecting to dashboard page...`);
-    res.redirect('/account/dashboard')
+    // return res.json({message: "Login successful"});
+    res.redirect('/account/dashboard');
   }
   catch (error: any) {
     res.status(500);
@@ -146,14 +150,14 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
 /*GET user dashboard with information */
 export async function dashboard(req: Request, res: Response) {
+  console.log('calling controller to show user dashboard');
   const user = req.user;
-  const { username } = user;
-  res.render('dashboard', {
-    username: username.toUpperCase()
-    //
-    // values for ejs
-    // 
-  });
+  if (!user) {
+    return res.json({ message: 'kindly login as a user' });
+  }
+  // res.json({ data: user });
+  // console.log(user.dataValues);
+  res.render('dashboard', user.dataValues)
 }
 
 /**Generate random funding account number for user */

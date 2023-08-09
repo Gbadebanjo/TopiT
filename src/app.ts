@@ -32,7 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/', indexRouter);
-app.use('/', usersRouter);
+app.use('/', usersRouter);  // to allow signup and login
 app.use('/account', auth.authenticate, auth.authorization, usersRouter);
 app.use('/account/transaction', transactionsRouter);
 

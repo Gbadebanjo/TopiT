@@ -1,16 +1,17 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
+import * as utils from "../utils";
 import { Transaction } from "../models";
 
 export async function addTransaction(req: Request, res: Response) {
   // const id = uuidv4();
-  // const userId = req.user.id;
+  // const user = req.user.dataValues;
+  // const userId = user.id;
   // try {
-  //   await Transaction.create({ ...req.body, id, userId });
-    res.json({message: "transaction successful"});
+  //   const newTransaction = await Transaction.create({ ...req.body, id, userId });
+  //   res.json({message: "transaction successful", data: newTransaction});
   // } catch (error: any) {
-  //   console.log(error.message);
-  //   res.status(500).json({ error: 'error in transaction' });
+  //   res.status(500).json(error);
   // }
 }
 
@@ -20,34 +21,27 @@ export async function getAllTransactions(req: Request, res: Response) {
     const allTransactions = await Transaction.findAll();
     res.json(allTransactions)
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json(error);
   }
 }
 
-// export async function getTransaction(req: Request, res: Response) {
-//   console.log('calling controller function to get a transaction by id');
-//   try {
-//     const transaction = await Transaction.findOne({ where: { id: req.params.id } });
-//     if (transaction) {
-//       res.json(transaction);
-//     } else {
-//       res.status(404).json({ error: "Transaction not found!" });
-//     }
-//   } catch (error: any) {
-//     res.status(500).json({ error: error.message });
-//   }
-// }
+// account/transaction/recharge
+export async function recharge(req: Request, res: Response) {
+  const user = req.user.dataValues;
+  if (req.method === 'POST') {
+    console.log('calling controller to recharge airtime');
+    const id = uuidv4();
+    const userId = user.id;
+    try {
+      const newTransaction = await Transaction.create({ ...req.body, id, userId });
+      res.json({ message: "transaction successful", data: newTransaction });
+    } catch (error: any) {
+      res.status(500).json(error);
+    }
+  } else {
+    console.log('calling controller to show airtime recharge page');
+    res.json(user.transactions)
+    // res.render('recharge', {});
+  }
 
-// export async function deleteTransaction(req: Request, res: Response) {
-//   try {
-//     const transaction = await Transaction.findOne({ where: { id: req.params.id } });
-//     if (transaction) {
-//       await transaction.destroy();
-//       res.redirect(200, '/transactions');
-//     } else {
-//       throw new Error("Transaction not found!");
-//     }
-//   } catch (error: any) {
-//     res.status(500).json({ error: error.message });
-//   }
-// }
+}

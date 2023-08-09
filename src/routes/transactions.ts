@@ -3,9 +3,11 @@ import * as controller from "../controllers/transaction"
 
 const router = express.Router();
 
-// topit/account/transaction/
-router.get('/', controller.getAllTransactions);
-router.post('/', controller.addTransaction);
-
+// account/transaction/
+router.get('/all', controller.getAllTransactions);
+router.post('/recharge', controller.recharge);
+router.get('/recharge', controller.recharge);
 // import router into app.ts
 export default router;
+
+
