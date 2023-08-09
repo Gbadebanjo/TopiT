@@ -92,8 +92,8 @@ export async function login(req: Request, res: Response) {
     })
 
     console.log(`Hi dear! Let's get your dashboard. Redirecting to dashboard page...`);
-    return res.json({message: "Login successful", data: user.dataValues, token});
-    // res.redirect('/account/dashboard');
+    // return res.json({message: "Login successful", data: user.dataValues, token});
+    res.redirect('/account/dashboard');
   }
   catch (error: any) {
     res.status(500);
@@ -149,8 +149,9 @@ export async function dashboard(req: Request, res: Response) {
   if (!user) {
     return res.json({ message: 'kindly login as a user' });
   }
-  return res.json({message: 'showing dashboard', data: user });
-  // res.render('dashboard', user.dataValues)
+  // return res.json({message: 'showing dashboard', data: user });
+  console.log(user.dataValues)
+  res.render('dashboard', user.dataValues)
 }
 
 /**GET /account/users */
