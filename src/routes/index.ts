@@ -17,7 +17,7 @@ router.get('/', function (req, res) {
 /* GET signup page. */
 router.get('/signup', function (req, res) {
   // render view from views/signup.ejs
-  res.render('signup', {});
+  res.render('signup');
 });
 
 /* GET contact page. */
