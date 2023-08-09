@@ -1,29 +1,13 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
 import { User } from "../models";
+import { FundingAccount } from "../models";
 import * as utils from "../utils";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-/**Lists all users in database */
-export async function getAllUsers(req: Request, res: Response) {
-  console.log('calling controller to get all users');
-  if (!req.user.isAdmin) {
-    return res.status(401).json({ message: 'You are not an admin' })
-  }
-  try {
-    const allUsers = await User.findAll({
-      include: [{ all: true }],
-      // attributes: ['username', 'email', 'fullname']
-    });
-    return res.json(allUsers);
-  }
-  catch (error: any) {
-    res.json(error);
-  }
-}
 
-/**create user/admin acct */
+/**POST /signup or /admin/signup */
 export async function signup(req: Request, res: Response) {
   console.log('calling controller to sign up new user');
   const isAdmin = req.url === '/admin/signup';
@@ -57,6 +41,15 @@ export async function signup(req: Request, res: Response) {
       id: uuidv4(),
       isAdmin,
     });
+    // create funding acct for user
+    await FundingAccount.create({
+      id: uuidv4(),
+      bankName: 'Topidus Bank',
+      acctNo: Math.random().toString().slice(2, 12),
+      acctName: newUser.dataValues.fullname + ' Topit',
+      userId: newUser.dataValues.id,
+      acctBal: 0
+    })
     console.log(newUser)
     return res.status(201).json({ message: "new user created successfully", data: newUser });
   } catch (error: any) {
@@ -64,48 +57,8 @@ export async function signup(req: Request, res: Response) {
   }
 }
 
-/**edit user acct */
-export async function updateUser(req: Request, res: Response) {
-  console.log('calling controller to update user');
-  const updates = req.body;
-  try {
-    const user = await User.findOne({ where: { id: req.user.id } });
-    if (user) {
-      Object.assign(user, { ...user, ...updates });
-      await user.save();
-      // res.json({ message: 'updated successfully' })
-      return res.redirect('dashboard');
-    } else {
-      res.json({ message: 'kindly login as a user' })
-    }
-  }
-  catch (error: any) {
-    res.json(error);
-  }
-}
-
-/**delete user acct */
-export async function deleteUser(req: Request, res: Response) {
-  console.log('calling controller to delete user');
-  if (!req.user) {
-    return res.json({ message: 'kindly login as a user' });
-  }
-  try {
-    const user = await User.findOne({ where: { id: req.user.id } });
-    if (user) {
-      await user.destroy();
-      return res.redirect('/signup');
-      // return res.json({ message: "User deleted successfully", user })
-    }
-  }
-  catch (error: any) {
-    console.log(error.message)
-    res.json({ error: 'an error occured' });
-  }
-}
-
-/**Login user/admin */
-export async function login(req: Request, res: Response, next: NextFunction) {
+/**POST /login */
+export async function login(req: Request, res: Response) {
   console.log('calling controller to login user');
   try {
     const result = utils.loginValidator.validate(req.body, utils.options);
@@ -115,7 +68,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     }
 
     const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email }, include: [{ all: true }], });
     if (!user) {
       console.log('no user with such email');
       return res.status(400).json({ message: "Invalid login details" });
@@ -139,25 +92,83 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     })
 
     console.log(`Hi dear! Let's get your dashboard. Redirecting to dashboard page...`);
-    // return res.json({message: "Login successful"});
-    res.redirect('/account/dashboard');
+    return res.json({message: "Login successful", data: user.dataValues, token});
+    // res.redirect('/account/dashboard');
   }
   catch (error: any) {
     res.status(500);
-    res.render('error', { error, message: error.message });
+    res.json(error);
   }
 }
 
-/*GET user dashboard with information */
+/**PUT /account */
+export async function updateUser(req: Request, res: Response) {
+  console.log('calling controller to update user');
+  const updates = req.body;
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (user) {
+      Object.assign(user, { ...user, ...updates });
+      await user.save();
+      return res.json({ message: 'updated successfully', data: user.dataValues })
+      // return res.redirect('dashboard');
+    } else {
+      res.json({ message: 'kindly login as a user' })
+    }
+  }
+  catch (error: any) {
+    res.json(error);
+  }
+}
+
+/**DELETE /account */
+export async function deleteUser(req: Request, res: Response) {
+  console.log('calling controller to delete user');
+  if (!req.user) {
+    return res.json({ message: 'kindly login as a user' });
+  }
+  try {
+    console.log(req.user)
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (user) {
+      await user.destroy();
+      // return res.redirect('/signup');
+      return res.json({ message: "User deleted successfully", data: user.dataValues })
+    }
+  }
+  catch (error: any) {
+    console.log(error.message)
+    res.json({ error: 'an error occured' });
+  }
+}
+
+/**GET /account/dashboard */
 export async function dashboard(req: Request, res: Response) {
   console.log('calling controller to show user dashboard');
-  const user = req.user;
+  const user = req.user.dataValues;
   if (!user) {
     return res.json({ message: 'kindly login as a user' });
   }
-  // res.json({ data: user });
-  // console.log(user.dataValues);
-  res.render('dashboard', user.dataValues)
+  return res.json({message: 'showing dashboard', data: user });
+  // res.render('dashboard', user.dataValues)
+}
+
+/**GET /account/users */
+export async function getAllUsers(req: Request, res: Response) {
+  console.log('calling controller to get all users');
+  if (!req.user.isAdmin) {
+    return res.status(401).json({ message: 'You are not an admin' })
+  }
+  try {
+    const allUsers = await User.findAll({
+      include: [{ all: true }],
+      // attributes: ['username', 'email', 'fullname']
+    });
+    return res.json({message: 'showing all users', data: allUsers});
+  }
+  catch (error: any) {
+    res.json(error);
+  }
 }
 
 /**Generate random funding account number for user */

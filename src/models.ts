@@ -31,10 +31,6 @@ User.init({
   isAdmin: {
     type: DataTypes.BOOLEAN,
   },
-  fundingAccount: {
-    type: DataTypes.STRING,
-    defaultValue: Math.random().toString().slice(2, 12)
-  }
 }, {
   sequelize: db,
   tableName: "Users",
@@ -47,21 +43,24 @@ Transaction.init({
     type: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  amount: {
-    type: DataTypes.STRING,
-  },
   type: {
+    type: DataTypes.ENUM('debit', 'credit'),
+    allowNull: false
+  },
+  amount: {
     type: DataTypes.NUMBER,
+    allowNull: false
   },
   description: {
     type: DataTypes.STRING,
   },
-  date: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
+  service:{
+    type: DataTypes.ENUM('airtime', 'data', 'electricity', 'cable', 'fund'),
+    allowNull: false
   },
   userId: {
     type: DataTypes.UUIDV4,
+    allowNull: false
   }
 }, {
   sequelize: db,
@@ -74,21 +73,25 @@ FundingAccount.init({
     type: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  bank: {
+  bankName: {
     type: DataTypes.STRING,
-    defaultValue: 'Topidus Bank'
+    allowNull: false
   },
-  number: {
-    type: DataTypes.STRING
-  },
-  name: {
+  acctNo: {
     type: DataTypes.STRING,
+    allowNull: false,
+  },
+  acctName: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   userId: {
-    type: DataTypes.UUIDV4
+    type: DataTypes.UUIDV4,
+    allowNull: false
   },
-  balance:{
+  acctBal:{
     type: DataTypes.NUMBER,
+    allowNull: false,
   }
 }, {
   sequelize: db,
@@ -100,3 +103,8 @@ User.hasMany(Transaction, { foreignKey: 'userId', as: 'transactions' });
 
 FundingAccount.belongsTo(User, { foreignKey: 'userId' });
 User.hasOne(FundingAccount, { foreignKey: "userId", as: 'fundingAcct' });
+
+
+// mtn 1000 airtime debit
+// providus 5000 funding credit
+// serviceProvider amount service type

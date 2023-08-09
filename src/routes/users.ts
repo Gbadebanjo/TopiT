@@ -4,12 +4,12 @@ import * as controller from '../controllers/user';
 const router = express.Router();
 
 // admin and users can SIGNUP and LOGIN from these routes
-// topit/
+// /
 router.post('/admin/signup', controller.signup);
 router.post('/signup', controller.signup);
 router.post("/login", controller.login);
 
-// topit/account/
+// account/
 router.put("/",  controller.updateUser);
 router.delete("/", controller.deleteUser);
 

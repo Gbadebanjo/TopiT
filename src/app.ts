@@ -31,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
+// install routes
 app.use('/', indexRouter);
 app.use('/', usersRouter);  // to allow signup and login
 app.use('/account', auth.authenticate, auth.authorization, usersRouter);
