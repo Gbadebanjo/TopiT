@@ -1,45 +1,47 @@
 import { NextFunction, Response, Request } from "express";
 import { User } from "../models";
-import { loginValidator } from "../utils";
-import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 
 /**Verify user's identity */
 export function authenticate(req: Request, res: Response, next: NextFunction) {
-  console.log('authenticating user token...');
+  console.log('calling authenticate middleware');
   // user already has a token from login
   // I always have to paste the token manually in user's authorisation in postman
   // Is there a way i can put the token on the users authorisation
   // automatically after every login? YES ==> cookies to the rescue :)
   const secretKey = process.env.JWT_SECRET as string;
   const token = req.cookies.token;
+  console.log(token)
+
 
   if (!token) {
-    console.log('user unknown!')
-    return res.status(401).json({ message: "kindly sign in as a user!" });
+    return res.status(401).json({ message: "Please login/signup!" });
   }
 
   try {
     const user = jwt.verify(token, secretKey);
     req.user = user;
+    // token is valid, proceed!
     next();
   } catch (error: any) {
-    console.log({ error: error.message });
-    return res.status(500).json({ error: 'Please try again later' });
+    res.render('error', { error, message: error.message });
   }
 }
 
 /**Verify user's authority */
 export async function authorization(req: Request, res: Response, next: NextFunction) {
+  console.log('calling authorization middleware');
   try {
-    const user = await User.findOne({ where: { id: req.user.id } });
+    const user = await User.findOne({
+      where: { id: req.user.id },
+      include: [{ all: true }]
+    });
     if (user) {
-      console.log('fetching user data...')
-      req.user = user.dataValues;
-      console.log(req.user.username);
+      req.user = user;
+      // user is authorized, proceed!
       next();
     } else {
-      throw new Error("unable to identify user!");
+      return res.status(401).json({ message: "Please login/signup!" });
     }
   }
   catch (error: any) {

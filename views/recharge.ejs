@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TopiT</title>
     <link rel="stylesheet" href="/stylesheets/dashboard.css">
 </head>
+
 <body>
-    <section class="recharge_whole">
+  <section class="recharge_whole">
     <section class="nav_section">
         <nav class="nav_vertical">
           <h1 class="topit">TopiT</h1>
@@ -58,29 +60,41 @@
             <img src="./assets/mtn.png" alt="Line_logo">
             <h3>Recharge your MTN line</h3>
         </div>
-        <div class="enter_phone">   
-            <div class="enter">
-                <input type="tel" id="phone_number" placeholder="Enter your phone number to recharge" pattern="[0-9]{11}" required>
-            </div>
+        <a href="#">
+          <button type="submit">LOGOUT</button>
+        </a>
+      </nav>
+      <form class="recharge_page_section2" method="post" action="recharge">
+        <div class="recharge_page_logo">
+          <img src="./assets/mtn.png" alt="Line_logo">
+          <h3>Recharge your MTN line</h3>
+        </div>
+        <div class="enter_phone">
+          <div class="enter">
+            <input type="tel" id="phone_number" placeholder="Enter your phone number to recharge" pattern="[0-9]{11}"
+              required>
+          </div>
         </div>
         <div class="choose_amount"></div>
         <div class="line_or">
-            <hr>
-            <h3>OR</h3>
-            <hr>
+          <hr>
+          <h3>OR</h3>
+          <hr>
         </div>
 
         <div class="enter_amount">
-            <div class="enter">
-                <input type="number" id="custom_amount" placeholder="Enter recharge amount">
-            </div>
+          <div class="enter">
+            <input type="number" id="custom_amount" placeholder="Enter recharge amount">
+          </div>
         </div>
 
         <button type="submit">Recharge</button>
-    </div>
+      </form>
     </section>
 </section>
     <script src="/javascript/index.js"></script>
 </body>
+
 </html>
+
 </html>

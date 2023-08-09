@@ -17,7 +17,7 @@ router.get('/', function (req, res) {
 /* GET signup page. */
 router.get('/signup', function (req, res) {
   // render view from views/signup.ejs
-  res.render('signup', {});
+  res.render('signup');
 });
 
 /* GET contact page. */
@@ -28,9 +28,10 @@ router.get('/contact', function (req, res) {
 
 /* GET dashboard page. */
 // router.get('/account/dashboard', function (req, res) {
+//   console.log(req.user)
 //   // render view from views/dashboard.ejs
 //   res.render('dashboard', {
-//     username: req.user.username.toUpperCase()
+//     // username: req.user.username.toUpperCase()
 //     //
 //     // values for ejs
 //     // 
