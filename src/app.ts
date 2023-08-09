@@ -11,7 +11,7 @@ import * as dotenv from 'dotenv';
 import * as auth from "./middlewares/auth";
 
 // synchronize database
-db.sync({ 'force': false }).then(() => {
+db.sync({ 'force': true }).then(() => {
   console.log("database synced successfully!");
 }).catch(error => {
   console.log("error syncing db", error);
