@@ -12,11 +12,11 @@
   <nav class="nav_vertical">
     <h1 class="topit">TopiT</h1>
     <ul>
-        <li class="navlist1"><a href="dashboard.ejs">Dashboard</a></li>
-        <li class="navlist"><a href="recharge.ejs">Recharge</a></li>
+        <li class="navlist1"><a href="dashboard">Dashboard</a></li>
+        <li class="navlist"><a href="transaction/recharge">Recharge</a></li>
         <li class="navlist"><a href="data.ejs">Buy data</a></li>
         <li class="navlist"><a href="transactions.ejs">Transactions</a></li>
-        <li class="navlist"><a href="addfunds.ejs">Add funds</a></li>
+        <li class="navlist"><a href="transaction/fund">Add funds</a></li>
         <li class="navlist"><a href="withdraw.ejs">Withdraw funds</a></li>
     </ul>
   </nav>
@@ -42,7 +42,7 @@
       <h2>Account Summary</h2>
       <div class="wallet-balance">
         <p class="total_balance">Balance(Naira)</p>
-       <h1 class="four_hundred">400. 00</h1> 
+       <h1 class="four_hundred"><%=acctBal%></h1> 
       </div>
       <div class="recharge_data_pay">
         <p>Recharge</p> 
@@ -98,7 +98,7 @@
 <hr>
     <section class="transaction_funds-section">
         <div class="add_funds_section">
-            <a class="add_funds1" href="addfunds.ejs">
+            <a class="add_funds1" href="transaction/fund/">
                     <img class="funds_img" src="/images/pay.png" alt="add_Funds_pix">
                     <h3>Add Funds</h3>   
             </a>

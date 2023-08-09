@@ -51,7 +51,8 @@ export async function signup(req: Request, res: Response) {
       acctBal: 0
     })
     console.log(newUser)
-    return res.status(201).json({ message: "new user created successfully", data: newUser });
+    // return res.status(201).json({ message: "new user created successfully", data: newUser });
+    return res.redirect('/');
   } catch (error: any) {
     res.json(error);
   }
@@ -149,9 +150,13 @@ export async function dashboard(req: Request, res: Response) {
   if (!user) {
     return res.json({ message: 'kindly login as a user' });
   }
-  // return res.json({message: 'showing dashboard', data: user });
+  // return res.json({message: 'showing dashboard', data: user.fundingAcct.acctBal });
   console.log(user.dataValues)
-  res.render('dashboard', user.dataValues)
+  console.log(user)
+  res.render('dashboard', {
+    username: user.username,
+    acctBal: user.fundingAcct.acctBal
+  })
 }
 
 /**GET /account/users */

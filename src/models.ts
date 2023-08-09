@@ -54,14 +54,23 @@ Transaction.init({
   description: {
     type: DataTypes.STRING,
   },
-  service:{
+  service: {
     type: DataTypes.ENUM('airtime', 'data', 'electricity', 'cable', 'fund'),
     allowNull: false
   },
   userId: {
     type: DataTypes.UUIDV4,
     allowNull: false
-  }
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  serviceProvider: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'mtn'
+  },
 }, {
   sequelize: db,
   tableName: "Transactions",
@@ -89,7 +98,7 @@ FundingAccount.init({
     type: DataTypes.UUIDV4,
     allowNull: false
   },
-  acctBal:{
+  acctBal: {
     type: DataTypes.NUMBER,
     allowNull: false,
   }
