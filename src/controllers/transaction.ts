@@ -23,11 +23,30 @@ export async function recharge(req: Request, res: Response) {
     console.log('calling controller to recharge airtime');
     const id = uuidv4();
     const userId = user.id;
-    const { serviceProvider, amount, service, type } = req.body;
-    const description = `${serviceProvider} ${amount} ${service} ${type}`
+    const type = 'debit';
+    const service = 'airtime';
+    const { serviceProvider, amount, phone } = req.body;
+    const description = `${serviceProvider} ${amount} ${service} ${type} ${phone}`;
     try {
-      const newTransaction = await Transaction.create({ ...req.body, id, userId, description });
-      res.json({ message: "transaction successful", data: newTransaction });
+      const newTransaction = await Transaction.create({
+        amount,
+        id,
+        userId,
+        description,
+        type,
+        phone,
+        service
+      });
+      // update funding account balance
+      let fundingAccount = await FundingAccount.findOne({ where: { userId } });
+      await FundingAccount.update(
+        { acctBal: fundingAccount?.dataValues.acctBal - amount },
+        { where: { userId } }
+      );
+      
+      fundingAccount = await FundingAccount.findOne({ where: { userId } });
+      res.render('recharge', {});
+      // res.json({ message: "transaction successful", data: newTransaction });
     } catch (error: any) {
       res.status(500).json(error);
     }
@@ -45,7 +64,7 @@ export async function fund(req: Request, res: Response) {
     console.log('calling controller to fund wallet');
     const id = uuidv4();
     const userId = user.id;
-    const amount = req.body.amount;
+    const amount = Number(req.body.amount);
     const serviceProvider = 'Topidus';
     const type = 'debit';
     const service = 'fund';
@@ -68,7 +87,8 @@ export async function fund(req: Request, res: Response) {
           { where: { userId } }
         );
         fundingAccount = await FundingAccount.findOne({ where: { userId } });
-        res.json({ message: "transaction successful", data: fundingAccount?.dataValues });
+        // res.json({ message: "transaction successful", data: fundingAccount?.dataValues });
+        res.render('addfunds', {});
       }
 
     } catch (error: any) {
