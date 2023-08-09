@@ -68,32 +68,35 @@ Transaction.init({
   tableName: "Transactions",
 });
 
-// export class FundingAccount extends Model { };
-// FundingAccount.init({
-//   id: {
-//     type: DataTypes.UUIDV4,
-//     primaryKey: true,
-//   },
-//   bank: {
-//     type: DataTypes.STRING,
-//     defaultValue: 'Topidus Bank'
-//   },
-//   number: {
-//     type: DataTypes.STRING
-//   },
-//   name: {
-//     type: DataTypes.STRING,
-//   },
-//   userId: {
-//     type: DataTypes.UUIDV4
-//   }
-// }, {
-//   sequelize: db,
-//   tableName: "FundingAccounts"
-// })
+export class FundingAccount extends Model { };
+FundingAccount.init({
+  id: {
+    type: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  bank: {
+    type: DataTypes.STRING,
+    defaultValue: 'Topidus Bank'
+  },
+  number: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING,
+  },
+  userId: {
+    type: DataTypes.UUIDV4
+  },
+  balance:{
+    type: DataTypes.NUMBER,
+  }
+}, {
+  sequelize: db,
+  tableName: "FundingAccounts"
+})
 
 Transaction.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Transaction, { foreignKey: 'userId', as: 'transactions' });
 
-// FundingAccount.belongsTo(User, { foreignKey: 'userId' });
-// User.hasOne(FundingAccount, { foreignKey: "userId", as: 'fundingAcct' });
+FundingAccount.belongsTo(User, { foreignKey: 'userId' });
+User.hasOne(FundingAccount, { foreignKey: "userId", as: 'fundingAcct' });
