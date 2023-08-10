@@ -78,7 +78,7 @@ Transaction.init({
     // mtn, glo, airtel, 9mobile, topidusBank, dstv, gotv, startimes, phcn
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'mtn'
+    // defaultValue: 'mtn'
   },
 }, {
   sequelize: db,
