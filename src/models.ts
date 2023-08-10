@@ -67,9 +67,9 @@ Transaction.init({
     allowNull: true,
   },
   serviceProvider: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('mtn', 'airtel', '9mobile', 'glo'),
     allowNull: false,
-    defaultValue: 'mtn'
+    // defaultValue: 'mtn'
   },
 }, {
   sequelize: db,

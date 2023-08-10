@@ -43,40 +43,6 @@ ul {
   font-size: xx-large;
 }
 
-/* Styling for the recharge and data pay section */
-.recharge_data_pay {
-  background-color: rgb(255, 123, 93);
-  padding: 5% 8%;
-  margin-top: 20px;
-  color: rgb(255, 243, 243);
-}
-
-.recharge_data_pay  p {
-  margin-top: 0;
-}
-
-.recharge_section {
-  display: flex;
-  justify-content: space-between;
-}
-.network_logo_div{
-  background-color: rgb(219, 233, 247);
-  border-radius: 8px;
-  width: 20%;
-  display: flex;
-  justify-content: center;
-}
-
-.network_logo_div :hover{
-  width: 100%; 
-  padding: 4%;
-  transition: width 0.3s, padding 0.3s;
-}
-
-.network_logo{
-  width: 60%; 
-  padding: 20%;
-}
 
 .utility_section {
   display: flex;
@@ -190,8 +156,7 @@ align-items: center;
 .success_failure {
   width: 10%;
 }
-
-/* Styling the Recharge Page */
+/* Styling for the recharge and data pay section */
 .recharge_page_section2 {
   display: flex;
   flex-direction: column;
@@ -199,6 +164,39 @@ align-items: center;
   align-items: center;
   padding: 20px;
 }
+.recharge_data_pay {
+  background-color: rgb(255, 123, 93);
+  padding: 5% 8%;
+  margin-top: 100px;
+  color: rgb(255, 243, 243);
+  margin-bottom: 40px;
+}
+
+.recharge_data_pay  h3{
+  text-align: center;
+  margin-top: 10px;
+  padding-bottom: 20px;
+ 
+}
+
+.network_option_all{
+  display: flex;
+  justify-content: space-between;
+}
+
+.network_option{
+  display: flex;
+  justify-content: center;
+  width: 25%;
+  max-height: 70px;
+}
+
+.network_logo{
+  width: 50%; 
+}
+
+/* Styling the Recharge Page */
+
 
 .recharge_page_logo {
   display: flex;
@@ -241,23 +239,11 @@ input[type="number"] {
   border-radius: 4px;
 }
 
-.line_or{
-  display: flex;
-  align-items: center; 
-  justify-content: center; 
-  margin-top: 20px; 
-  margin-bottom: 20px; 
-}
-.line_or hr{
-  align-items: center;
-  height: 1px;
-  width: 150px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
+
 .recharge_page_section2 h3 {
   font-size: 20px;
   margin: 10px 0;
+  text-align: center;
 }
 .rechargeDiv{
   display: flex;
@@ -505,15 +491,15 @@ input[type="number"] {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 40px;
+      /* padding: 10px; */
       width: 60%;
-      margin-left: 17%;
-      margin-right: 20%;
+      margin-left: 18%;
+      /* margin-right: 20%; */
       border: 1px solid rgb(255, 123, 93);
       box-shadow: 10px 7px 4px rgba(0, 0, 0, 0.2);
     }
 
-    .rechargeDiv{
+    /* .rechargeDiv{
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
@@ -521,13 +507,13 @@ input[type="number"] {
       width: 90%;
       margin-bottom: 10px;
       margin-left: 5%; 
-    }
+    } */
 
-    .rechargeDiv h4{
+    /* .rechargeDiv h4{
       flex: 0 0 10%;
       padding: 15px;
       border-radius: 10px;
-    }
+    } */
     .enter{
       display: flex;
       justify-content: space-between;
@@ -546,24 +532,8 @@ input[type="number"] {
   box-shadow: 7px 7px 4px rgba(0, 0, 0, 0.2);
 }
 
-.line_or{
-  display: flex;
-  align-items: center; 
-  justify-content: center; 
-  margin-top: 20px; 
-  margin-bottom: 20px; 
-  width: 100%;
-}
-.line_or hr{
-  flex: 1; /* Allow the horizontal rule to grow and take available space */
-  height: 1px;
-  border: none; /* Remove the default border */
-  background-color: #b7afaf; /* Choose your preferred color for the line */
-  margin: 0 10px; /* Add some space on the sides of the horizontal rule */
-}
-
-.recharge_page_section2 button {
-  width: 90%;
+.form button {
+  width: 40%;
   padding: 20px 20px;
   font-size: 18px;
   background-color: #016993ff;
@@ -574,5 +544,38 @@ input[type="number"] {
   transition: background-color 0.3s ease;
   margin-left: 5%;  
   margin-right: 5%;
+}
+
+
+.recharge_data_pay {
+  background-color: rgb(255, 123, 93);
+  padding: 5% 8%;
+  margin-top: 40px;
+  color: rgb(255, 243, 243);
+  margin-bottom: 40px;
+  width: 75%;
+}
+
+.recharge_data_pay  h3{
+  text-align: center;
+  margin-top: 10px;
+  padding-bottom: 20px;
+ 
+}
+
+.network_option_all{
+  display: flex;
+  justify-content: space-between;
+}
+
+.network_option{
+  display: flex;
+  justify-content: center;
+  width: 25%;
+  max-height: 70px;
+}
+
+.network_logo{
+  width: 50%; 
 }
 }

@@ -33,6 +33,7 @@ export async function recharge(req: Request, res: Response) {
         id,
         userId,
         description,
+        serviceProvider,
         type,
         phone,
         service
