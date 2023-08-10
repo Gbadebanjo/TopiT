@@ -7,6 +7,7 @@ import db from './config/db.config';
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 import transactionsRouter from './routes/transactions';
+import userPagesRouter from './routes/user-pages';
 import * as dotenv from 'dotenv';
 import * as auth from "./middlewares/auth";
 
@@ -33,8 +34,9 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // install routes
 app.use('/', indexRouter);
-app.use('/', usersRouter);  // to allow signup and login
+app.use('/', usersRouter);  // allow anyone to access signup and login
 app.use('/account', auth.authenticate, auth.authorization, usersRouter);
+app.use('/account', auth.authenticate, auth.authorization, userPagesRouter );
 app.use('/account/transaction', transactionsRouter);
 
 // catch 404 and forward to error handler

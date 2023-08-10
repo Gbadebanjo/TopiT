@@ -49,12 +49,12 @@ export async function signup(req: Request, res: Response) {
       acctName: newUser.dataValues.fullname + ' Topit',
       userId: newUser.dataValues.id,
       acctBal: 0
-    })
-    console.log(newUser)
+    });
+    // console.log(newUser)
     // return res.status(201).json({ message: "new user created successfully", data: newUser });
     return res.redirect('/');
   } catch (error: any) {
-    res.json(error);
+    res.render('error', { error, message: error.message });
   }
 }
 
@@ -98,12 +98,12 @@ export async function login(req: Request, res: Response) {
   }
   catch (error: any) {
     res.status(500);
-    res.json(error);
+    res.render('error', { error, message: error.message });
   }
 }
 
 /**PUT /account */
-export async function updateUser(req: Request, res: Response) {
+export async function updateAcct(req: Request, res: Response) {
   console.log('calling controller to update user');
   const updates = req.body;
   try {
@@ -118,12 +118,13 @@ export async function updateUser(req: Request, res: Response) {
     }
   }
   catch (error: any) {
-    res.json(error);
+    res.status(500);
+    res.render('error', { error, message: error.message });
   }
 }
 
 /**DELETE /account */
-export async function deleteUser(req: Request, res: Response) {
+export async function deleteAcct(req: Request, res: Response) {
   console.log('calling controller to delete user');
   if (!req.user) {
     return res.json({ message: 'kindly login as a user' });
@@ -138,43 +139,33 @@ export async function deleteUser(req: Request, res: Response) {
     }
   }
   catch (error: any) {
-    console.log(error.message)
-    res.json({ error: 'an error occured' });
+    res.status(500);
+    res.render('error', { error, message: error.message });
   }
 }
 
-/**GET /account/dashboard */
-export async function dashboard(req: Request, res: Response) {
-  console.log('calling controller to show user dashboard');
-  const user = req.user.dataValues;
-  if (!user) {
-    return res.json({ message: 'kindly login as a user' });
-  }
-  // return res.json({message: 'showing dashboard', data: user.fundingAcct.acctBal });
-  console.log(user.dataValues)
-  console.log(user)
-  res.render('dashboard', {
-    username: user.username,
-    acctBal: user.fundingAcct.acctBal
-  })
-}
-
-/**GET /account/users */
+/**GET /account/all */
 export async function getAllUsers(req: Request, res: Response) {
   console.log('calling controller to get all users');
-  if (!req.user.isAdmin) {
-    return res.status(401).json({ message: 'You are not an admin' })
-  }
   try {
+    if (!req.user.isAdmin) {
+      throw new Error('Unauthorized access!');
+    }
     const allUsers = await User.findAll({
       include: [{ all: true }],
       // attributes: ['username', 'email', 'fullname']
     });
-    return res.json({message: 'showing all users', data: allUsers});
+    return res.json({ message: 'showing all users', data: allUsers });
   }
   catch (error: any) {
-    res.json(error);
+    res.status(500);
+    res.render('error', { error, message: error.message });
   }
+}
+
+// GET /account should redirect to /account/dashboard
+export async function getDashboard(req: Request, res: Response) {
+  res.redirect('/account/dashboard');
 }
 
 /**Generate random funding account number for user */
