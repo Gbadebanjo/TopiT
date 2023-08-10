@@ -7,6 +7,7 @@ const router = express.Router();
 /* GET dashboard page. */
 // url => /account/dashboard
 router.get('/dashboard', function (req, res) {
+  console.log('calling dashboard');
   // render view from views/dashboard.ejs
   const user = req.user.dataValues;
   res.render('dashboard', {

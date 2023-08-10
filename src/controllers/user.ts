@@ -52,6 +52,7 @@ export async function signup(req: Request, res: Response) {
     });
     // console.log(newUser)
     // return res.status(201).json({ message: "new user created successfully", data: newUser });
+    console.log('signup successful. Redirecting to home/login page...')
     return res.redirect('/');
   } catch (error: any) {
     res.render('error', { error, message: error.message });
@@ -167,18 +168,3 @@ export async function getAllUsers(req: Request, res: Response) {
 export async function getDashboard(req: Request, res: Response) {
   res.redirect('/account/dashboard');
 }
-
-/**Generate random funding account number for user */
-// export async function getAccountNo() {
-//   const fundingAccts = await FundingAccount.findAll();
-//   console.log(fundingAccts);
-//   let acctNo = Math.random().toString().slice(2, 12);
-//   // while (usedAccountNumbers.includes(acctNo)) {
-//   //   acctNo = Math.random().toString().slice(2, 12);
-//   // }
-
-//   await FundingAccount.create({
-//     id: uuidv4(),
-//     number: acctNo,
-//   })
-// }
