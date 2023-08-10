@@ -21,21 +21,20 @@ export async function recharge(req: Request, res: Response) {
   const user = req.user.dataValues;
   if (req.method === 'POST') {
     console.log('calling controller to recharge airtime');
+    const service = req.url === '/airtime' ? 'airtime' : 'data';
     const id = uuidv4();
     const userId = user.id;
     const type = 'debit';
-    const service = 'airtime';
     const { serviceProvider, amount, phone } = req.body;
     const description = `${serviceProvider} ${amount} ${service} ${type} ${phone}`;
     try {
-      const newTransaction = await Transaction.create({
-        amount,
+      await Transaction.create({
+        ...req.body,
         id,
         userId,
         description,
         serviceProvider,
         type,
-        phone,
         service
       });
       // update funding account balance
@@ -44,9 +43,10 @@ export async function recharge(req: Request, res: Response) {
         { acctBal: fundingAccount?.dataValues.acctBal - amount },
         { where: { userId } }
       );
-      
+
       fundingAccount = await FundingAccount.findOne({ where: { userId } });
-      res.render('recharge', {});
+      // res.render('recharge', {});
+      res.redirect('dashboard')
       // res.json({ message: "transaction successful", data: newTransaction });
     } catch (error: any) {
       res.status(500).json(error);
@@ -54,7 +54,10 @@ export async function recharge(req: Request, res: Response) {
   } else {
     console.log('calling controller to show airtime recharge page');
     // res.json({message: 'showing transactions page', data: user});
-    res.render('recharge', {});
+    res.render('dashboard', {
+      username: user.username,
+      acctBal: user.fundingAcct.acctBal
+    });
   }
 }
 
@@ -67,16 +70,16 @@ export async function fund(req: Request, res: Response) {
     const userId = user.id;
     const amount = Number(req.body.amount);
     const serviceProvider = 'Topidus';
-    const type = 'debit';
+    const type = 'credit';
     const service = 'fund';
-    const description = `${serviceProvider} ${amount} ${service} ${type}`
+    const description = `${serviceProvider} ${amount} ${service} ${type}`;
     try {
       // find user funding account
       let fundingAccount = await FundingAccount.findOne({ where: { userId } });
       if (fundingAccount) {
         await Transaction.create({
-          id: uuidv4(),
-          type: 'debit',
+          id,
+          type,
           amount,
           description,
           service,
@@ -87,9 +90,10 @@ export async function fund(req: Request, res: Response) {
           { acctBal: fundingAccount.dataValues.acctBal + amount },
           { where: { userId } }
         );
+
         fundingAccount = await FundingAccount.findOne({ where: { userId } });
         // res.json({ message: "transaction successful", data: fundingAccount?.dataValues });
-        res.render('addfunds', {});
+        res.redirect('/dashboard');
       }
 
     } catch (error: any) {
@@ -100,5 +104,5 @@ export async function fund(req: Request, res: Response) {
     // res.json({ message: 'showing transactions page', data: user });
     res.render('addfunds');
   }
-  
+
 }

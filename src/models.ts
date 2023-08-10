@@ -6,6 +6,7 @@ User.init({
   id: {
     type: DataTypes.UUIDV4,
     primaryKey: true,
+    allowNull: false
   },
   username: {
     type: DataTypes.STRING,
@@ -26,10 +27,12 @@ User.init({
     allowNull: false
   },
   phone: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    allowNull: false
   },
   isAdmin: {
     type: DataTypes.BOOLEAN,
+    allowNull: false,
   },
 }, {
   sequelize: db,
@@ -44,18 +47,22 @@ Transaction.init({
     primaryKey: true,
   },
   type: {
-    type: DataTypes.ENUM('debit', 'credit'),
+    // credit, debit
+    type: DataTypes.STRING,
     allowNull: false
   },
   amount: {
+    // 100, 200, 500, 1000, 2000, 5000, 10000
     type: DataTypes.NUMBER,
     allowNull: false
   },
   description: {
+    // N + amount + serviceProvider + service
     type: DataTypes.STRING,
   },
   service: {
-    type: DataTypes.ENUM('airtime', 'data', 'electricity', 'cable', 'fund'),
+    // airtime, data, utility bill payment, fund
+    type: DataTypes.STRING,
     allowNull: false
   },
   userId: {
@@ -63,11 +70,13 @@ Transaction.init({
     allowNull: false
   },
   phone: {
+    // 08012345678
     type: DataTypes.STRING,
     allowNull: true,
   },
   serviceProvider: {
-    type: DataTypes.ENUM('mtn', 'airtel', '9mobile', 'glo'),
+    // mtn, glo, airtel, 9mobile, topidusBank, dstv, gotv, startimes, phcn
+    type: DataTypes.STRING,
     allowNull: false,
     // defaultValue: 'mtn'
   },
@@ -84,13 +93,15 @@ FundingAccount.init({
   },
   bankName: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    defaultValue: "Topidus Bank"
   },
   acctNo: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   acctName: {
+    // username-topidus
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -101,6 +112,7 @@ FundingAccount.init({
   acctBal: {
     type: DataTypes.NUMBER,
     allowNull: false,
+    defaultValue: 0
   }
 }, {
   sequelize: db,
@@ -108,12 +120,7 @@ FundingAccount.init({
 })
 
 Transaction.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Transaction, { foreignKey: 'userId', as: 'transactions' });
+User.hasMany(Transaction, { foreignKey: 'userId' });
 
 FundingAccount.belongsTo(User, { foreignKey: 'userId' });
-User.hasOne(FundingAccount, { foreignKey: "userId", as: 'fundingAcct' });
-
-
-// mtn 1000 airtime debit
-// providus 5000 funding credit
-// serviceProvider amount service type
+User.hasOne(FundingAccount, { foreignKey: "userId" });

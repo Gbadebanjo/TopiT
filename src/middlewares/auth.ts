@@ -5,14 +5,8 @@ import jwt from "jsonwebtoken";
 /**Verify user's identity */
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   console.log('calling authenticate middleware');
-  // user already has a token from login
-  // I always have to paste the token manually in user's authorisation in postman
-  // Is there a way i can put the token on the users authorisation
-  // automatically after every login? YES ==> cookies to the rescue :)
   const secretKey = process.env.JWT_SECRET as string;
   const token = req.cookies.token;
-  console.log(token)
-
 
   if (!token) {
     return res.status(401).json({ message: "Please login/signup!" });
