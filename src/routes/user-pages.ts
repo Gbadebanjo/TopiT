@@ -18,14 +18,13 @@ router.get('/dashboard', function (req, res) {
     descriptions.push(transaction.dataValues.description);
     createdAts.push(transaction.dataValues.createdAt.toLocaleDateString());
   });
-  console.log(createdAts)
   res.render('dashboard', {
-    username: user.username,
+    // username: user.username,
+    ...user,
     acctBal: user.FundingAccount.dataValues.acctBal,
     amt: amounts,
     desc: descriptions,
     date: createdAts,
-    // transactions: [1,2,3,4]
   })
 });
 
@@ -33,21 +32,24 @@ router.get('/dashboard', function (req, res) {
 // url => /account/transaction/recharge
 router.get('/transaction/recharge', function (req, res) {
   // render view from views/recharge.ejs
-  res.render('recharge');
+  const user = req.user.dataValues;
+  res.render('recharge', user);
 });
 
 /* GET data page. */
 // url => /account/transaction/data
 router.get('/transaction/data', function (req, res) {
   // render view from views/data.ejs
-  res.render('data');
+  const user = req.user.dataValues;
+  res.render('data', user);
 });
 
 /* GET addfunds page. */
 // url => /account/transaction/fund
 router.get('/transaction/fund', function (req, res) {
   // render view from views/addfunds.ejs
-  res.render('addfunds');
+  const user = req.user.dataValues;
+  res.render('addfunds', user);
 });
 
 /* GET profile page. */
@@ -69,7 +71,8 @@ router.get('/profile', function (req, res) {
 // url => /account/profile/update
 router.get('/profile/update', function (req, res) {
   // render view from views/update-profile.ejs
-  res.render('update-profile');
+  const user = req.user.dataValues;
+  res.render('update-profile', user);
 });
 
 /* GET all-transactions page. */
@@ -97,7 +100,8 @@ router.get('/transaction/all', function (req, res) {
 // url => /account/transaction/withdraw
 router.get('/transaction/withdraw', function (req, res) {
   // render view from views/withdraw.ejs
-  res.render('withdraw');
+  const user = req.user.dataValues;
+  res.render('withdraw', user);
 });
 
 // import router into app.ts

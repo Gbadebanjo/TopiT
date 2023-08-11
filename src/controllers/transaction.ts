@@ -5,23 +5,10 @@ import { FundingAccount } from "../models";
 
 // controllers -> routes -> app.ts
 
-/**GET /account/transaction/all */
-export async function getAllTransactions(req: Request, res: Response) {
-  console.log('calling controller function to get all transactions');
-  try {
-    const allTransactions = await Transaction.findAll();
-    console.log(allTransactions);
-    res.render('transactions', {})
-    // res.json(allTransactions)
-  } catch (error: any) {
-    res.status(500).json(error);
-  }
-}
-
 /**GET or POST /account/transaction/recharge */
 export async function recharge(req: Request, res: Response) {
   const user = req.user.dataValues;
-  console.log('calling controller to recharge airtime');
+  console.log('calling controller to recharge airtime/data');
   const service = req.url === '/recharge' ? 'airtime' : 'data';
   const id = uuidv4();
   const userId = user.id;
