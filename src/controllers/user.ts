@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
 import { User } from "../models";
-import { FundingAccount } from "../models";
+import { FundingAccount, Transaction } from "../models";
 import * as utils from "../utils";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -134,6 +134,8 @@ export async function deleteAcct(req: Request, res: Response) {
     console.log(req.user)
     const user = await User.findOne({ where: { id: req.user.id } });
     if (user) {
+      await FundingAccount.destroy({ where: { userId: user.dataValues.id } });
+      await Transaction.destroy({ where: { userId: user.dataValues.id } });
       await user.destroy();
       // return res.redirect('/signup');
       return res.json({ message: "User deleted successfully", data: user.dataValues })
