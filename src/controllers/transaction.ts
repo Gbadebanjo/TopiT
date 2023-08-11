@@ -34,7 +34,7 @@ export async function recharge(req: Request, res: Response) {
 
     fundingAccount = await FundingAccount.findOne({ where: { userId } });
     console.log('new acct balance: ', fundingAccount?.dataValues.acctBal);
-    res.redirect(req.url.slice(1));
+    res.redirect(`success`);
     // res.json({ message: "transaction successful", data: newTransaction });
   } catch (error: any) {
     res.status(500).json(error);
@@ -74,7 +74,7 @@ export async function fund(req: Request, res: Response) {
       fundingAccount = await FundingAccount.findOne({ where: { userId } });
       // res.json({ message: "transaction successful", data: fundingAccount?.dataValues });
       console.log('new acct balance: ', fundingAccount?.dataValues.acctBal);
-      res.redirect('fund');
+      res.redirect('success');
     }
 
   } catch (error: any) {

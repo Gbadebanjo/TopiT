@@ -19,6 +19,11 @@ router.get('/signup', function (req, res) {
   res.render('signup');
 });
 
+router.get('admin/signup', function (req, res) {
+  // render view from views/signup.ejs
+  res.render('signup');
+});
+
 /* GET contact page. */
 // url => /contact
 router.get('/contact', function (req, res) {

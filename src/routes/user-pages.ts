@@ -56,6 +56,7 @@ router.get('/transaction/fund', function (req, res) {
 // url => /account/profile
 router.get('/profile', function (req, res) {
   // render view from views/profile.ejs
+  console.log(req.headers.referer)
   const user = req.user.dataValues;
   const fundingAcct = user.FundingAccount.dataValues;
   res.render('profile', {
