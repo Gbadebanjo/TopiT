@@ -14,9 +14,9 @@
       <nav class="nav_vertical">
         <h1 class="topit">TopiT</h1>
         <ul>
-          <li class="navlist1"><a href="/account/dashboard">Dashboard</a></li>
+          <li class="navlist"><a href="/account/dashboard">Dashboard</a></li>
           <li class="navlist"><a href="/account/transaction/recharge">Recharge</a></li>
-          <li class="navlist"><a href="/account/transaction/data">Buy data</a></li>
+          <li class="navlist1"><a href="/account/transaction/data">Buy data</a></li>
           <li class="navlist"><a href="/account/transaction/all">Transactions</a></li>
           <li class="navlist"><a href="/account/transaction/fund">Add funds</a></li>
           <li class="navlist"><a href="/account/transaction/withdraw">Withdraw funds</a></li>
@@ -34,9 +34,9 @@
       <nav class="nav_main">
         <div class="pix_name">
           <img class="top_nav_pix" src="/images/pic.png" alt="profilepix">
-          <p>John Doe</p>
+          <p><%= username %></p>
         </div>
-        <a href="#">
+        <a href="/account/logout">
           <button type="submit">LOGOUT</button>
         </a>
       </nav>

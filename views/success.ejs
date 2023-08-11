@@ -4,14 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TopiT</title>
+  <title>Topit</title>
   <link rel="stylesheet" href="/stylesheets/dashboard.css">
-  <link rel="stylesheet" href="/stylesheets/add_withdraw.css">
-
+  <link rel="stylesheet" href="/stylesheets/success.css">
 </head>
 
 <body>
-  <section class="whole_page">
+  <section class="whole">
     <section class="nav_section">
       <nav class="nav_vertical">
         <h1 class="topit">TopiT</h1>
@@ -20,7 +19,7 @@
           <li class="navlist"><a href="/account/transaction/recharge">Recharge</a></li>
           <li class="navlist"><a href="/account/transaction/data">Buy data</a></li>
           <li class="navlist"><a href="/account/transaction/all">Transactions</a></li>
-          <li class="navlist1"><a href="/account/transaction/fund">Add funds</a></li>
+          <li class="navlist"><a href="/account/transaction/fund">Add funds</a></li>
           <li class="navlist"><a href="/account/transaction/withdraw">Withdraw funds</a></li>
         </ul>
       </nav>
@@ -32,26 +31,34 @@
         </ul>
       </nav>
     </section>
+
     <section class="section_nav_main">
       <nav class="nav_main">
         <div class="pix_name">
           <img class="top_nav_pix" src="/images/pic.png" alt="profilepix">
-          <p><%= username %></p>
+          <p>
+            <%=username%>
+          </p>
         </div>
         <a href="/account/logout">
           <button type="submit">LOGOUT</button>
         </a>
       </nav>
-      <form class="addfunds" method="post" action="">
-        <h3>Top up your TopiT wallet</h3>
-        <div class="amount_one">
-          <p>Enter the amount to top up</p>
-          <input type="number" id="amount" placeholder="Amount" name="amount">
-        </div>
-        <button type="submit">Top up</button>
-      </form>
+            <div class="allSuccess">
+                <img src="/images/thumb.jpeg" alt="sucess-image">
+                <h1>Transaction Successful !</h1>
+                <p>Thank you for always believing us</p>
+                <div class="buttons">
+               <a href=" "><button type="button">Back</button></a> 
+               <a href=" "><button type="button">Dashboard</button></a> 
+                </div>
+            </div>
     </section>
   </section>
+  <footer>
+    <!-- Add footer content here -->
+  </footer>
+  <script src="/javascript/index.js"></script>
 </body>
 
 </html>
