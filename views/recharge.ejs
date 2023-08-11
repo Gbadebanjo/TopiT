@@ -34,16 +34,16 @@
       <nav class="nav_main">
         <div class="pix_name">
           <img class="top_nav_pix" src="/images/pic.png" alt="profilepix">
-          <p>John Doe</p>
+          <p><%= username %></p>
         </div>
-        <a href="#">
+        <a href="/account/logout">
           <button type="submit">LOGOUT</button>
         </a>
       </nav>
-        <form class="recharge_page_section2" method="post" action="recharge">
-          <div class="recharge_data_pay">
-            <h3>Recharge your line</h3>
-            <div class="network_option_all">
+      <form class="recharge_page_section2" method="post" action="recharge">
+        <div class="recharge_data_pay">
+          <h3>Recharge your line</h3>
+          <div class="network_option_all">
             <label class="network_option">
               <input type="radio" name="serviceProvider" value="mtn">
               <img class="network_logo" src="/images/mtn.png" alt="Mtn_logo">
@@ -61,25 +61,25 @@
               <img class="network_logo" src="/images/9mobile.png" alt="9mobile_logo">
             </label>
           </div>
-          </div>
-          <!-- <div class="recharge_page_logo">
+        </div>
+        <!-- <div class="recharge_page_logo">
             <img src="/images/mtn.png" alt="Line_logo">
             <h3>Recharge your MTN line</h3>
           </div> -->
-          <div class="enter_phone">
-            <div class="enter">
-              <input name="phone" type="tel" id="phone_number" placeholder="Enter your phone number to recharge" pattern="[0-9]{11}"
-                required>
-            </div>
+        <div class="enter_phone">
+          <div class="enter">
+            <input name="phone" type="tel" id="phone_number" placeholder="Enter your phone number to recharge"
+              pattern="[0-9]{11}" required>
           </div>
-          <div class="enter_amount">
-            <div class="enter">
-              <input name="amount" type="number" id="amount" placeholder="Enter recharge amount">
-            </div>
+        </div>
+        <div class="enter_amount">
+          <div class="enter">
+            <input name="amount" type="number" id="amount" placeholder="Enter recharge amount">
           </div>
+        </div>
 
-          <button type="submit">Recharge</button>
-        </form>
+        <button type="submit">Recharge</button>
+      </form>
     </section>
   </section>
   <script src="/javascript/index.js"></script>
