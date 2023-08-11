@@ -21,36 +21,26 @@
 .signUpImage {
     flex: 1;
     padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Form heading */
-  h1 {
-    margin-bottom: 20px;
-    color: #007bff;
-  }
-  
-  /* Form input fields */
-  label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-  }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    width: 100%;
+    text-align: center; 
+    max-width: 100%;
+    border-radius: 25px;
+}
+
+h1 {
+    margin-bottom: 10px;
+    color: #2657a1;
+}
+
+h2 {
+  color: #2657a1;
+  margin-bottom: 30px;
+}
+
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 50%;
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 5px;
