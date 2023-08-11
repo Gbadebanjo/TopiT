@@ -1,5 +1,6 @@
 import express from 'express';
 
+// routes -> app.ts
 // router and controllers for home pages (rendered views only)
 
 const router = express.Router();

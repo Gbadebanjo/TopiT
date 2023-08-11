@@ -6,6 +6,7 @@ import * as utils from "../utils";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// controllers -> routes -> app.ts
 
 /**POST /signup or /admin/signup */
 export async function signup(req: Request, res: Response) {
@@ -52,7 +53,7 @@ export async function signup(req: Request, res: Response) {
     });
     // console.log(newUser)
     // return res.status(201).json({ message: "new user created successfully", data: newUser });
-    console.log('signup successful. Redirecting to home/login page...')
+    console.log('signup successful. Redirecting to home page for login...')
     return res.redirect('/');
   } catch (error: any) {
     res.render('error', { error, message: error.message });
@@ -93,7 +94,6 @@ export async function login(req: Request, res: Response) {
       maxAge: expiresIn * 1000,  // in milliseconds
     })
 
-    console.log(`Hi dear! Let's get your dashboard. Redirecting to dashboard page...`);
     // return res.json({message: "Login successful", data: user.dataValues, token});
     res.redirect('/account/dashboard');
   }
@@ -164,7 +164,15 @@ export async function getAllUsers(req: Request, res: Response) {
   }
 }
 
-// GET /account should redirect to /account/dashboard
-export async function getDashboard(req: Request, res: Response) {
-  res.redirect('/account/dashboard');
+// logout user
+export async function logout(req: Request, res: Response) {
+  console.log('calling controller to logout user');
+  try {
+    res.clearCookie('token');
+    res.redirect('/');
+  }
+  catch (error: any) {
+    res.status(500);
+    res.render('error', { error, message: error.message });
+  }
 }

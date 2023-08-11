@@ -32,11 +32,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// install routes
+// install and use imported routers
 app.use('/', indexRouter);
-app.use('/', usersRouter);  // allow anyone to access signup and login
-app.use('/account', auth.authenticate, auth.authorization, usersRouter);
-app.use('/account', auth.authenticate, auth.authorization, userPagesRouter );
+app.use('/', usersRouter);  // routes unprotected because of signup and login
+app.use('/account', [auth.authenticate, auth.authorization], [usersRouter, userPagesRouter]);
+// app.use('/account', auth.authenticate, auth.authorization, userPagesRouter );
 app.use('/account/transaction', transactionsRouter);
 
 // catch 404 and forward to error handler

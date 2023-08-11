@@ -9,24 +9,26 @@
 </head>
 <body>
 <section class="whole">
-<section class="nav_section">
-  <nav class="nav_vertical">
-    <h1 class="topit">TopiT</h1>
-    <ul>
-      <li class="navlist"><a href="/account/dashboard">Dashboard</a></li>
-      <li class="navlist"><a href="transaction/recharge">Recharge</a></li>
-      <li class="navlist"><a href="data.ejs">Buy data</a></li>
-      <li class="navlist"><a href="transactions.ejs">Transactions</a></li>
-      <li class="navlist"><a href="transaction/fund">Add funds</a></li>
-      <li class="navlist"><a href="withdraw.ejs">Withdraw funds</a></li>
-  </ul>
-  </nav>
-  <nav class="nav_btm">
-        <img class="navpix" src="/images/pic.png"  alt="profilepix">
-        <a class="profilename" href="profile"><h4>My Profile</h4></a>
-    </ul>
-  </nav>
-</section>
+  <section class="nav_section">
+    <nav class="nav_vertical">
+      <h1 class="topit">TopiT</h1>
+      <ul>
+        <li class="navlist1"><a href="/account/dashboard">Dashboard</a></li>
+        <li class="navlist"><a href="/account/transaction/recharge">Recharge</a></li>
+        <li class="navlist"><a href="/account/transaction/data">Buy data</a></li>
+        <li class="navlist"><a href="/account/transaction/all">Transactions</a></li>
+        <li class="navlist"><a href="/account/transaction/fund">Add funds</a></li>
+        <li class="navlist"><a href="/account/transaction/withdraw">Withdraw funds</a></li>
+      </ul>
+    </nav>
+    <nav class="nav_btm">
+      <img class="navpix" src="/images/pic.png" alt="profilepix">
+      <a class="profilename" href="/account/profile">
+        <h4>My Profile</h4>
+      </a>
+      </ul>
+    </nav>
+  </section>
 <div class="profile-page">
   <nav class="nav_main">   
     <div class="pix_name">
@@ -46,19 +48,19 @@
     <div >
       <div class="each_profile">
         <p>Name</p>
-        <h4>John Doe</h4>
+        <h4><%= fullname %></h4>
       </div>
       <div class="each_profile">
         <p>Email</p>
-        <h4>john.doe@example.com</h4>
+        <h4><%= email %></h4>
       </div>
       <div class="each_profile">
         <p>Phone Number</p>
-        <h4>08090250410</h4>
+        <h4><%= phone %></h4>
       </div>
       <div class="each_profile">
         <p>Funding account Number</p>
-        <h4>9027607467</h4>
+        <h4><%= fundingAcct %></h4>
       </div>
     </div>
    <div class="button_container">

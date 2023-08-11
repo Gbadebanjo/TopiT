@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
-import * as utils from "../utils";
 import { Transaction } from "../models";
 import { FundingAccount } from "../models";
+
+// controllers -> routes -> app.ts
 
 /**GET /account/transaction/all */
 export async function getAllTransactions(req: Request, res: Response) {
   console.log('calling controller function to get all transactions');
   try {
     const allTransactions = await Transaction.findAll();
+    console.log(allTransactions);
     res.render('transactions', {})
     // res.json(allTransactions)
   } catch (error: any) {
@@ -20,14 +22,14 @@ export async function getAllTransactions(req: Request, res: Response) {
 export async function recharge(req: Request, res: Response) {
   const user = req.user.dataValues;
   console.log('calling controller to recharge airtime');
-  const service = req.url === '/airtime' ? 'airtime' : 'data';
+  const service = req.url === '/recharge' ? 'airtime' : 'data';
   const id = uuidv4();
   const userId = user.id;
   const type = 'debit';
   const { serviceProvider, amount, phone } = req.body;
   const description = `${serviceProvider} ${amount} ${service} ${type} ${phone}`;
   try {
-    await Transaction.create({
+    const newTransaction = await Transaction.create({
       ...req.body,
       id,
       userId,
@@ -35,6 +37,7 @@ export async function recharge(req: Request, res: Response) {
       type,
       service
     });
+    console.log('description: ', newTransaction.dataValues.description);
     // update funding account balance
     let fundingAccount = await FundingAccount.findOne({ where: { userId } });
     await FundingAccount.update(
@@ -43,18 +46,18 @@ export async function recharge(req: Request, res: Response) {
     );
 
     fundingAccount = await FundingAccount.findOne({ where: { userId } });
-    // res.render('recharge', {});
-    res.redirect('dashboard')
+    console.log('new acct balance: ', fundingAccount?.dataValues.acctBal);
+    res.redirect(req.url.slice(1));
     // res.json({ message: "transaction successful", data: newTransaction });
   } catch (error: any) {
     res.status(500).json(error);
   }
 }
 
-/**GET or POST /account/transaction/fund */
+/**POST /account/transaction/fund */
 export async function fund(req: Request, res: Response) {
-  const user = req.user.dataValues;
   console.log('calling controller to fund wallet');
+  const user = req.user.dataValues;
   const id = uuidv4();
   const userId = user.id;
   const amount = Number(req.body.amount);
@@ -72,7 +75,8 @@ export async function fund(req: Request, res: Response) {
         amount,
         description,
         service,
-        userId
+        userId,
+        serviceProvider
       });
       // update funding account balance
       await FundingAccount.update(
@@ -82,7 +86,8 @@ export async function fund(req: Request, res: Response) {
 
       fundingAccount = await FundingAccount.findOne({ where: { userId } });
       // res.json({ message: "transaction successful", data: fundingAccount?.dataValues });
-      res.redirect('/dashboard');
+      console.log('new acct balance: ', fundingAccount?.dataValues.acctBal);
+      res.redirect('fund');
     }
 
   } catch (error: any) {

@@ -2,7 +2,9 @@ import { NextFunction, Response, Request } from "express";
 import { User } from "../models";
 import jwt from "jsonwebtoken";
 
-/**Verify user's identity */
+// middlewares -> app.ts
+
+// authenticate user => verify token
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   console.log('calling authenticate middleware');
   const secretKey = process.env.JWT_SECRET as string;
@@ -22,7 +24,7 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-/**Verify user's authority */
+// authorize user => verify user
 export async function authorization(req: Request, res: Response, next: NextFunction) {
   console.log('calling authorization middleware');
   try {

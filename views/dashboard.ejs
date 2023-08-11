@@ -1,50 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Topit</title>
   <link rel="stylesheet" href="/stylesheets/dashboard.css">
 </head>
-<body>
-<section class="whole">
-<section class="nav_section">
-  <nav class="nav_vertical">
-    <h1 class="topit">TopiT</h1>
-    <ul>
-        <li class="navlist1"><a href="dashboard">Dashboard</a></li>
-        <li class="navlist"><a href="transaction/recharge">Recharge</a></li>
-        <li class="navlist"><a href="transaction/data">Buy data</a></li>
-        <li class="navlist"><a href="transaction/all">Transactions</a></li>
-        <li class="navlist"><a href="transaction/addfund">Add funds</a></li>
-        <li class="navlist"><a href="withdraw.ejs">Withdraw funds</a></li>
-    </ul>
-  </nav>
-  <nav class="nav_btm">
-        <img class="navpix" src="/images/pic.png" alt="profilepix">
-        <a class="profilename" href="profile"><h4>My Profile</h4></a>
-    </ul>
-  </nav>
-</section>
 
-<section class="section_nav_main">
-    <nav class="nav_main">   
-        <div class="pix_name">
-             <img class="top_nav_pix" src="/images/pic.png" alt="profilepix">
-            <p><%=username%></p>
-        </div>
-        <a href="#">
-            <button type="submit">LOGOUT</button>
-          </a>
+<body>
+  <section class="whole">
+    <section class="nav_section">
+      <nav class="nav_vertical">
+        <h1 class="topit">TopiT</h1>
+        <ul>
+          <li class="navlist1"><a href="/account/dashboard">Dashboard</a></li>
+          <li class="navlist"><a href="/account/transaction/recharge">Recharge</a></li>
+          <li class="navlist"><a href="/account/transaction/data">Buy data</a></li>
+          <li class="navlist"><a href="/account/transaction/all">Transactions</a></li>
+          <li class="navlist"><a href="/account/transaction/fund">Add funds</a></li>
+          <li class="navlist"><a href="/account/transaction/withdraw">Withdraw funds</a></li>
+        </ul>
       </nav>
-  <main class="main">
-    <section class="summary_section">
-      <h2>Account Summary</h2>
-      <div class="wallet-balance">
-        <p class="total_balance">Balance(Naira)</p>
-       <h1 class="four_hundred"><%=acctBal%></h1> 
-      </div>
-      <!-- <div class="recharge_data_pay">
+      <nav class="nav_btm">
+        <img class="navpix" src="/images/pic.png" alt="profilepix">
+        <a class="profilename" href="/account/profile">
+          <h4>My Profile</h4>
+        </a>
+        </ul>
+      </nav>
+    </section>
+
+    <section class="section_nav_main">
+      <nav class="nav_main">
+        <div class="pix_name">
+          <img class="top_nav_pix" src="/images/pic.png" alt="profilepix">
+          <p>
+            <%=username%>
+          </p>
+        </div>
+        <a href="/account/logout">
+          <button type="submit">LOGOUT</button>
+        </a>
+      </nav>
+      <main class="main">
+        <section class="summary_section">
+          <h2>Account Summary</h2>
+          <div class="wallet-balance">
+            <p class="total_balance">Balance(Naira)</p>
+            <h1 class="four_hundred">
+              <%=acctBal%>
+            </h1>
+          </div>
+          <!-- <div class="recharge_data_pay">
         <p>Recharge</p> 
             <div class="recharge_section">
                 <a class="network_logo_div" href="recharge.ejs">
@@ -94,89 +102,114 @@
             </a>   
         </div>
     </div> -->
-    </section>
-<hr>
-    <section class="transaction_funds-section">
-        <div class="add_funds_section">
+        </section>
+        <hr>
+        <section class="transaction_funds-section">
+          <div class="add_funds_section">
             <a class="add_funds1" href="transaction/fund/">
-                    <img class="funds_img" src="/images/pay.png" alt="add_Funds_pix">
-                    <h3>Add Funds</h3>   
+              <img class="funds_img" src="/images/pay.png" alt="add_Funds_pix">
+              <h3>Add Funds</h3>
             </a>
             <div class="add_funds2" href="withdraw.ejs">
-                    <img class="funds_img"  src="/images/withdraw2.png" alt="withdraw_Funds_pix">
-                    <h3>Withdraw Funds</h3>   
+              <img class="funds_img" src="/images/withdraw2.png" alt="withdraw_Funds_pix">
+              <h3>Withdraw Funds</h3>
             </div>
-        </div>
+          </div>
 
-        <section class="transactions">
+          <section class="transactions">
             <div class="transactions_head">
-                <h3>Recent transactions</h3>
-                <a href="#">view all</a>
+              <h3>Recent transactions</h3>
+              <a href="#">view all</a>
             </div>
-           <div class="each_transaction">
-                <div class="success_failure_date">
-                    <img class="success_failure" src="/images/success_icon.png" alt="success_tick_pix">
-                    <div class="added_date"> 
-                        <h4>Added to Topit</h4>
-                        <p>5/08/2023</p>
-                    </div>
-                </div>
-                <div class="dollar_success">
-                    <h4> + $1000</h4>
-                    <p>success</p>
-                </div>
-           </div>
-           <hr>
-           <div class="each_transaction">
-            <div class="success_failure_date">
-                <img  class="success_failure"  src="/images/success_icon.png" alt="success_tick_pix">
-                <div class="added_date">
-                    <h4> Call card recharge </h4>
-                    <p>5/08/2023</p>
-                </div>
-            </div>
-                <div class="dollar_success">
-                    <h4> - $100</h4>
-                    <p>success</p>
-                </div>
-           </div>
-           <hr>
-           <div class="each_transaction">
-            <div class="success_failure_date">
-                <img  class="success_failure" src="/images/failure-icon-23216.png" alt="failed_tick_pix">
-                <div class="added_date">
-                    <h4>Call card recharge </h4>
-                    <p>5/08/2023</p>
-                </div>
-            </div>
-                <div class="dollar_success">
-                <h4> - $100</h4>
-                <p>failed</p>
-                </div>
-           </div>
-           <hr>
-           <div class="each_transaction">
-            <div class="success_failure_date">
+            <div class="each_transaction">
+              <div class="success_failure_date">
                 <img class="success_failure" src="/images/success_icon.png" alt="success_tick_pix">
                 <div class="added_date">
-                    <h4>Data Recharge </h4>
-                    <p>5/08/2023</p>
+                  <h4>
+                    <%= desc[0] %>
+                  </h4>
+                  <p>
+                    <%= date[0] %>
+                  </p>
                 </div>
+              </div>
+              <div class="dollar_success">
+                <h4>
+                  <% amt[0] %>
+                </h4>
+                <p>success</p>
+              </div>
             </div>
-                <div class="dollar_success">
-                    <h4> - $500</h4>
-                    <p>success</p>
+            <hr>
+            <div class="each_transaction">
+              <div class="success_failure_date">
+                <img class="success_failure" src="/images/success_icon.png" alt="success_tick_pix">
+                <div class="added_date">
+                  <h4>
+                    <%= desc[1] %>
+                  </h4>
+                  <p>
+                    <%= date[1] %>
+                  </p>
                 </div>
-           </div>
-           <hr>
+              </div>
+              <div class="dollar_success">
+                <h4>
+                  <% amt[1] %>
+                </h4>
+                <p>success</p>
+              </div>
+            </div>
+            <hr>
+            <div class="each_transaction">
+              <div class="success_failure_date">
+                <img class="success_failure" src="/images/success_icon.png" alt="success_tick_pix">
+                <div class="added_date">
+                  <h4>
+                    <%= desc[2] %>
+                  </h4>
+                  <p>
+                    <%= date[2] %>
+                  </p>
+                </div>
+              </div>
+              <div class="dollar_success">
+                <h4>
+                  <% amt[2] %>
+                </h4>
+                <p>success</p>
+              </div>
+            </div>
+            <hr>
+            <div class="each_transaction">
+              <div class="success_failure_date">
+                <img class="success_failure" src="/images/success_icon.png" alt="success_tick_pix">
+                <div class="added_date">
+                  <h4>
+                    <%= desc[3] %>
+                  </h4>
+                  <p>
+                    <%= date[3] %>
+                  </p>
+                </div>
+              </div>
+              <div class="dollar_success">
+                <h4>
+                  <% amt[3] %>
+                </h4>
+                <p>success</p>
+              </div>
+            </div>
+            <hr>
+          </section>
         </section>
+      </main>
     </section>
-  </main>
-</section>
-</section>
+  </section>
   <footer>
     <!-- Add footer content here -->
   </footer>
   <script src="/javascript/index.js"></script>
 </body>
+
 </html>
