@@ -41,15 +41,17 @@ router.get('/recharge-airtime', function (req, res) {
   // render view from views/recharge.ejs
   const {user} = req.userKey;
   res.render('recharge', {
-    username: user?.dataValues.username,
+    username: user.username,
   });
 });
 
 /* GET data page. */
 router.get('/recharge-data', function (req, res) {
   // render view from views/data.ejs
-  const user = req.userKey.dataValues;
-  res.render('data', user);
+  const {user} = req.userKey;
+  res.render('data', {
+    username: user.username
+  });
 });
 
 /* GET addfunds page. */
@@ -82,28 +84,36 @@ router.get('/profile-update', function (req, res) {
 });
 
 /* GET all-transactions page. */
-router.get('/transactions', function (req, res) {
+router.get('/transactions', async function (req, res) {
   // render view from views/transactions.ejs
   console.log('calling controller to get all transactions (last 4)');
-  const user = req.userKey.dataValues;
+  const {user, id} = req.userKey;
+  const userTransactions = await getUserTransactions(id, 4);
+  const userFundAcct = await getUserFundAcct(id);
 
-  let amounts: number[] = [], descriptions: string[] = [], createdAts: Date[] = [];
-  user.Transactions.reverse().slice(0, 4).forEach((transaction: any) => {
-    amounts.push(transaction.dataValues.amount);
-    descriptions.push(transaction.dataValues.description);
-    createdAts.push(transaction.dataValues.createdAt.toLocaleDateString());
+  const amounts: number[] = []
+  const descriptions: string[] = []
+  const createdAts: Date[] = [];
+  
+  userTransactions.forEach((transaction: any) => {
+    amounts.push(transaction.amount);
+    descriptions.push(transaction.description);
+    createdAts.push(transaction.createdAt);
   });
+
   res.render('transactions', {
     username: user.username,
+    acctBal: userFundAcct?.acctBal,
     amt: amounts,
     desc: descriptions,
-    date: createdAts
+    date: createdAts,
   })
 });
 
 router.get('/withdraw', function (req, res) {
   // render view from views/withdraw.ejs
-  const user = req.userKey.dataValues;
+  const {user} = req.userKey;
+  console.log(user);
   res.render('withdraw', user);
 });
 
