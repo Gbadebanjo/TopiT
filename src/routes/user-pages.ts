@@ -1,87 +1,91 @@
 import express from "express";
+import { getUserFundAcct, getUserTransactions } from "../utils";
 
 // routes -> app.ts
 // pages router and controllers for user pages (rendered views only)
 
 const router = express.Router();
 
-/* GET dashboard page. */
-// url => /account/dashboard
-router.get('/dashboard', function (req, res) {
+// GET /account should redirect to /account/dashboard
+router.get('/', async function (req, res) {
+  res.redirect('dashboard');
+});
+
+router.get('/dashboard', async function (req, res) {
   console.log('calling dashboard');
   // render view from views/dashboard.ejs
-  const user = req.user.dataValues;
+  const {user, id} = req.userKey;
+  const userTransactions = await getUserTransactions(id, 4);
+  const userFundAcct = await getUserFundAcct(id);
 
-  let amounts: number[] = [], descriptions: string[] = [], createdAts: Date[] = [];
-  user.Transactions.reverse().slice(0, 4).forEach((transaction: any) => {
-    amounts.push(transaction.dataValues.amount);
-    descriptions.push(transaction.dataValues.description);
-    createdAts.push(transaction.dataValues.createdAt.toLocaleDateString());
+  const amounts: number[] = []
+  const descriptions: string[] = []
+  const createdAts: Date[] = [];
+  
+  userTransactions.forEach((transaction: any) => {
+    amounts.push(transaction.amount);
+    descriptions.push(transaction.description);
+    createdAts.push(transaction.createdAt);
   });
+
   res.render('dashboard', {
-    // username: user.username,
-    ...user,
-    acctBal: user.FundingAccount.dataValues.acctBal,
+    username: user.username,
+    acctBal: userFundAcct?.acctBal,
     amt: amounts,
     desc: descriptions,
     date: createdAts,
   })
 });
 
-/* GET recharge (airtime) page. */
-// url => /account/transaction/recharge
-router.get('/transaction/recharge', function (req, res) {
+router.get('/recharge-airtime', function (req, res) {
   // render view from views/recharge.ejs
-  const user = req.user.dataValues;
-  res.render('recharge', user);
+  const {user} = req.userKey;
+  res.render('recharge', {
+    username: user?.dataValues.username,
+  });
 });
 
 /* GET data page. */
-// url => /account/transaction/data
-router.get('/transaction/data', function (req, res) {
+router.get('/recharge-data', function (req, res) {
   // render view from views/data.ejs
-  const user = req.user.dataValues;
+  const user = req.userKey.dataValues;
   res.render('data', user);
 });
 
 /* GET addfunds page. */
-// url => /account/transaction/fund
-router.get('/transaction/fund', function (req, res) {
+router.get('/fund-wallet', function (req, res) {
   // render view from views/addfunds.ejs
-  const user = req.user.dataValues;
+  const user = req.userKey.user;
   res.render('addfunds', user);
 });
 
 /* GET profile page. */
-// url => /account/profile
-router.get('/profile', function (req, res) {
+router.get('/profile', async function (req, res) {
   // render view from views/profile.ejs
-  console.log(req.headers.referer)
-  const user = req.user.dataValues;
-  const fundingAcct = user.FundingAccount.dataValues;
+  const {user, id} = req.userKey;
+  console.log(user);
+  const fundingAcct = await getUserFundAcct(id);
   res.render('profile', {
     username: user.username,
     email: user.email,
     phone: user.phone,
     fullname: user.fullname,
-    fundingAcct: fundingAcct.acctNo + ' ' + "Topidus Bank",
+    fundingAcct: fundingAcct?.acctNo + ' ' + "Topidus Bank",
   });
 });
 
 /* GET update profile page. */
-// url => /account/profile/update
-router.get('/profile/update', function (req, res) {
+router.get('/profile-update', function (req, res) {
   // render view from views/update-profile.ejs
-  const user = req.user.dataValues;
+  const {user} = req.userKey;
   res.render('update-profile', user);
 });
 
 /* GET all-transactions page. */
-// url => /account/transaction/all
-router.get('/transaction/all', function (req, res) {
+router.get('/transactions', function (req, res) {
   // render view from views/transactions.ejs
   console.log('calling controller to get all transactions (last 4)');
-  const user = req.user.dataValues;
+  const user = req.userKey.dataValues;
 
   let amounts: number[] = [], descriptions: string[] = [], createdAts: Date[] = [];
   user.Transactions.reverse().slice(0, 4).forEach((transaction: any) => {
@@ -97,13 +101,21 @@ router.get('/transaction/all', function (req, res) {
   })
 });
 
-/* GET withdraw page. */
-// url => /account/transaction/withdraw
-router.get('/transaction/withdraw', function (req, res) {
+router.get('/withdraw', function (req, res) {
   // render view from views/withdraw.ejs
-  const user = req.user.dataValues;
+  const user = req.userKey.dataValues;
   res.render('withdraw', user);
 });
+
+router.get('/success', function(req, res){
+  console.log('calling success page...')
+  const {user} = req.userKey;
+  const backbtn = req.headers.referer;
+  res.render('success', {
+    username: user.username,
+    back: backbtn
+  });
+})
 
 // import router into app.ts
 export default router;

@@ -11,7 +11,7 @@ import jwt from "jsonwebtoken";
 /**POST /signup or /admin/signup */
 export async function signup(req: Request, res: Response) {
   console.log('calling controller to sign up new user');
-  const isAdmin = req.url === '/admin/signup';
+  const isAdmin = req.url === '/signup-admin';
   try {
     if (isAdmin) {
       // try {
@@ -87,7 +87,7 @@ export async function login(req: Request, res: Response) {
     // give user a token after successful login
     const secretKey = process.env.JWT_SECRET as string;
     const expiresIn = 3 * 60 * 60   // in seconds
-    const token = jwt.sign({ id: user.dataValues.id }, secretKey, { expiresIn });
+    const token = jwt.sign({ id: user.dataValues.id, isAdmin: user.dataValues.isAdmin }, secretKey, { expiresIn });
     // save token as a cookie
     res.cookie('token', token, {
       httpOnly: true,
@@ -108,12 +108,15 @@ export async function updateAcct(req: Request, res: Response) {
   console.log('calling controller to update user');
   const updates = req.body;
   try {
-    const user = await User.findOne({ where: { id: req.user.id } });
+    const user = await User.findOne({
+      where: { id: req.userKey.id },
+      attributes: ['id', 'username', 'email', 'fullname', 'phone', 'createdAt']
+    });
     if (user) {
       Object.assign(user, { ...user, ...updates });
       await user.save();
-      return res.json({ message: 'updated successfully', data: user.dataValues })
-      // return res.redirect('dashboard');
+      // return res.json({ message: 'updated successfully', data: user.dataValues })
+      return res.redirect('profile');
     } else {
       res.json({ message: 'kindly login as a user' })
     }
@@ -127,18 +130,17 @@ export async function updateAcct(req: Request, res: Response) {
 /**DELETE /account */
 export async function deleteAcct(req: Request, res: Response) {
   console.log('calling controller to delete user');
-  if (!req.user) {
+  if (!req.userKey) {
     return res.json({ message: 'kindly login as a user' });
   }
   try {
-    console.log(req.user)
-    const user = await User.findOne({ where: { id: req.user.id } });
+    const user = await User.findOne({ where: { id: req.userKey.id } });
     if (user) {
       await FundingAccount.destroy({ where: { userId: user.dataValues.id } });
       await Transaction.destroy({ where: { userId: user.dataValues.id } });
       await user.destroy();
-      // return res.redirect('/signup');
-      return res.json({ message: "User deleted successfully", data: user.dataValues })
+      return res.redirect('/signup');
+      // return res.json({ message: "User deleted successfully", data: user.dataValues })
     }
   }
   catch (error: any) {
@@ -151,7 +153,7 @@ export async function deleteAcct(req: Request, res: Response) {
 export async function getAllUsers(req: Request, res: Response) {
   console.log('calling controller to get all users');
   try {
-    if (!req.user.isAdmin) {
+    if (!req.userKey.isAdmin) {
       throw new Error('Unauthorized access!');
     }
     const allUsers = await User.findAll({
@@ -166,7 +168,7 @@ export async function getAllUsers(req: Request, res: Response) {
   }
 }
 
-// logout user
+/**POST /account/logout => logout user */
 export async function logout(req: Request, res: Response) {
   console.log('calling controller to logout user');
   try {

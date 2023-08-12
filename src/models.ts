@@ -1,7 +1,16 @@
 import { DataTypes, Model } from "sequelize";
 import db from "./config/db.config";
 
-export class User extends Model { };
+export interface UserAttributes {
+  id: string;
+  username: string;
+  email: string;
+  password: string;
+  fullname: string;
+  phone: string;
+  isAdmin: boolean;
+}
+export class User extends Model<UserAttributes> { };
 User.init({
   id: {
     type: DataTypes.UUIDV4,
@@ -40,7 +49,19 @@ User.init({
   // modelName: "Users"
 });
 
-export class Transaction extends Model { }
+export interface TransactionAttributes {
+  id: string;
+  type: string;
+  amount: number;
+  description: string;
+  service: string;
+  userId: string;
+  phone: string;
+  serviceProvider: string;
+  createdAt?: string;
+}
+
+export class Transaction extends Model<TransactionAttributes> { }
 Transaction.init({
   id: {
     type: DataTypes.UUIDV4,
@@ -85,7 +106,16 @@ Transaction.init({
   tableName: "Transactions",
 });
 
-export class FundingAccount extends Model { };
+export interface FundingAccountAttributes {
+  id: string;
+  bankName: string;
+  acctNo: string;
+  acctName: string;
+  userId: string;
+  acctBal: number;
+}
+
+export class FundingAccount extends Model<FundingAccountAttributes> { };
 FundingAccount.init({
   id: {
     type: DataTypes.UUIDV4,

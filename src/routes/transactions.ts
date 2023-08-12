@@ -6,33 +6,33 @@ import * as controller from "../controllers/transaction"
 
 const router = express.Router();
 
-// url => /account/transaction
-router.post('/recharge', controller.recharge);
-router.post('/data', controller.recharge);
-router.post('/fund', controller.fund);
+// url => /account
+router.post('/recharge-airtime', controller.recharge);
+router.post('/recharge-data', controller.recharge);
+router.post('/fund-wallet', controller.fund);
 
-router.get('/', function (req, res) {
-  res.redirect('/recharge');
-});
+// router.get('/', function (req, res) {
+//   res.redirect('/recharge');
+// });
 
-router.get('/success', function (req, res){
-  const user = req.user.dataValues;
-  const back = req.header('referer');
-  res.render('success', {
-    ...user,
-    // message: 'Airtime recharge successful',
-    back
-  });
-})
+// router.get('/success', function (req, res){
+//   const user = req.user.dataValues;
+//   const back = req.header('referer');
+//   res.render('success', {
+//     ...user,
+//     // message: 'Airtime recharge successful',
+//     back
+//   });
+// })
 
-router.get('/success', function (req, res){
-  const user = req.user.dataValues;
-  res.render('success', {
-    ...user,
-    // message: 'Data purchase successful',
-    // back: '/account/transaction/data'
-  });
-})
+// router.get('/success', function (req, res){
+//   const user = req.user.dataValues;
+//   res.render('success', {
+//     ...user,
+//     // message: 'Data purchase successful',
+//     // back: '/account/transaction/data'
+//   });
+// })
 
 // redirectes to airtime recharge page
 // router.get('/success/back', function (req, res){
@@ -55,9 +55,9 @@ router.get('/success', function (req, res){
 // });
 
 // redirectes to airtime recharge page
-router.get('/success/back', function (req, res){
-  res.redirect('/account/transaction/data');
-})
+// router.get('/success/back', function (req, res){
+//   res.redirect('/account/transaction/data');
+// })
 
 
 // import router into app.ts

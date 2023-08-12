@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import db from "./config/db.config";
 import indexRouter from "./routes/index";
+import authRouter from "./routes/auth";
 import usersRouter from "./routes/users";
 import transactionsRouter from "./routes/transactions";
 import userPagesRouter from "./routes/user-pages";
@@ -34,16 +35,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 
+`========================`
 // install and use imported routers
-app.use("/", indexRouter);
-app.use("/", usersRouter); // routes unprotected because of signup and login
-app.use(
-  "/account",
-  [auth.authenticate, auth.authorization],
-  [usersRouter, userPagesRouter]
-);
-// app.use('/account', auth.authenticate, auth.authorization, userPagesRouter );
-app.use("/account/transaction", transactionsRouter);
+// app.use(url, [middlewares], [routers]) => syntax for using middlewares
+app.use("/", [indexRouter, authRouter]);
+app.use("/account", [auth.authenticate, auth.authorization], [usersRouter, userPagesRouter, transactionsRouter]);
+// app.use("/account/transaction", transactionsRouter);
+`========================`
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -6,14 +6,12 @@ import express from 'express';
 const router = express.Router();
 
 /* GET home page. */
-// url => /
 router.get('/', function (req, res) {
   // render view from views/index.ejs
   res.render('index');
 });
 
 /* GET signup page. */
-// url => /signup
 router.get('/signup', function (req, res) {
   // render view from views/signup.ejs
   res.render('signup');
@@ -25,7 +23,6 @@ router.get('admin/signup', function (req, res) {
 });
 
 /* GET contact page. */
-// url => /contact
 router.get('/contact', function (req, res) {
   // render view from views/contact.ejs
   res.render('contact');

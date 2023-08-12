@@ -7,26 +7,11 @@ import * as controller from '../controllers/user';
 // create router for /account
 const router = express.Router();
 
-// admin and users SIGNUP routes
-router.post('/admin/signup', controller.signup);
-router.post('/signup', controller.signup);
-
-// admin and users LOGIN route
-router.post("/login", controller.login);
-
-router.put("/",  controller.updateAcct);
+router.put("/profile",  controller.updateAcct);
 router.delete("/", controller.deleteAcct);
 
-// GET /account should redirect to /account/dashboard
-router.get('/', function (req, res) {
-  res.redirect('dashboard');
-});
-
 // admin GET all users => return all users in json format
-router.get('/all', controller.getAllUsers);
-
-// POST /account/logout => logout user
-router.post('/logout', controller.logout);
+router.get('/all-users', controller.getAllUsers);
 
 // import router into app.ts
 export default router;

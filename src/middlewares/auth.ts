@@ -1,48 +1,62 @@
-import { NextFunction, Response, Request } from "express";
+import { Request, Response, NextFunction } from "express";
 import { User } from "../models";
 import jwt from "jsonwebtoken";
 
-// middlewares -> app.ts
-
-// authenticate user => verify token
+/**
+ * Middleware function to authenticate user by verifying token.
+ * If token is valid, sets the `req.user` property to the decoded user object.
+ * If token is invalid or not found, redirects to the homepage or renders an error page.
+ * 
+ * @param req - The request object.
+ * @param res - The response object.
+ * @param next - The next function to call in the middleware chain.
+ */
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   console.log('calling authenticate middleware');
   const secretKey = process.env.JWT_SECRET as string;
   const token = req.cookies.token;
 
   if (!token) {
-    // return res.status(401).json({ message: "Please login/signup!" });
     console.log('No token found. Please sign up or login if you already have an account');
     return res.redirect('/');
   }
 
   try {
-    const user = jwt.verify(token, secretKey);
-    req.user = user;
-    // token is valid, proceed!
+    const decoded = jwt.verify(token, secretKey);
+    req.userKey = decoded;
     next();
   } catch (error: any) {
     res.render('error', { error, message: error.message });
   }
 }
 
-// authorize user => verify user
+/**
+ * Middleware function to verify the authorization of a user.
+ * It checks if the user exists in the database based on the user ID provided in the request token.
+ * If the user is found, it sets the `req.user` property to the user object and proceeds to the next middleware.
+ * If the user is not found, it returns a 401 Unauthorized response.
+ * @param req The request object.
+ * @param res The response object.
+ * @param next The next middleware function.
+ */
 export async function authorization(req: Request, res: Response, next: NextFunction) {
-  console.log('calling authorization middleware');
+  console.log('Calling authorization middleware');
   try {
+    const { id } = req.userKey;
     const user = await User.findOne({
-      where: { id: req.user.id },
-      include: [{ all: true }]
+      where: { id },
+      // include: [{ all: true }]
     });
-    if (user) {
-      req.user = user;
-      // user is authorized, proceed!
-      next();
-    } else {
-      return res.status(401).json({ message: "Please login/signup!" });
+
+    if (!user) {
+      return res.status(401).send('Unauthorized');
     }
-  }
-  catch (error: any) {
+
+    const userModel = await getUserById(id);
+    req.userKey.user = userModel?.dataValues;
+    // req.user = user;
+    next();
+  } catch (error: any) {
     res.render('error', { error, message: error.message });
   }
 }
@@ -51,7 +65,16 @@ export async function authorization(req: Request, res: Response, next: NextFunct
 declare global {
   namespace Express {
     interface Request {
-      user?: any;
+      userKey?: any;
     }
   }
+}
+
+export async function getUserById(id: string) {
+  const data = await User.findOne({
+    where: { id: id },
+    attributes: ['id', 'username', 'email', 'fullname', 'phone'],
+    // include: [{ model: FundingAccount, attributes: ['acctNo', 'acctBal'] }]
+  });
+  return data;
 }

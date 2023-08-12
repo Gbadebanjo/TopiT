@@ -5,11 +5,11 @@ import { FundingAccount } from "../models";
 
 // controllers -> routes -> app.ts
 
-/**GET or POST /account/transaction/recharge */
+/**POST /account/recharge */
 export async function recharge(req: Request, res: Response) {
-  const user = req.user.dataValues;
+  const {user} = req.userKey;
   console.log('calling controller to recharge airtime/data');
-  const service = req.url === '/recharge' ? 'airtime' : 'data';
+  const service = req.url === '/recharge-airtime' ? 'airtime' : 'data';
   const id = uuidv4();
   const userId = user.id;
   const type = 'debit';
@@ -41,10 +41,10 @@ export async function recharge(req: Request, res: Response) {
   }
 }
 
-/**POST /account/transaction/fund */
+/**POST /account/fund */
 export async function fund(req: Request, res: Response) {
   console.log('calling controller to fund wallet');
-  const user = req.user.dataValues;
+  const user = req.userKey.user;
   const id = uuidv4();
   const userId = user.id;
   const amount = Number(req.body.amount);
