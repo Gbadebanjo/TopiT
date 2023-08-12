@@ -26,7 +26,7 @@ router.get('/', function (req, res) {
 router.get('/all', controller.getAllUsers);
 
 // POST /account/logout => logout user
-router.get('/logout', controller.logout);
+router.post('/logout', controller.logout);
 
 // import router into app.ts
 export default router;

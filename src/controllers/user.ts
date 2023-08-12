@@ -147,7 +147,7 @@ export async function deleteAcct(req: Request, res: Response) {
   }
 }
 
-/**GET /account/all */
+/**GET /account/all (for admin) */
 export async function getAllUsers(req: Request, res: Response) {
   console.log('calling controller to get all users');
   try {

@@ -11,7 +11,9 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies.token;
 
   if (!token) {
-    return res.status(401).json({ message: "Please login/signup!" });
+    // return res.status(401).json({ message: "Please login/signup!" });
+    console.log('No token found. Please sign up or login if you already have an account');
+    return res.redirect('/');
   }
 
   try {
