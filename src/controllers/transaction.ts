@@ -73,8 +73,8 @@ export async function fund(req: Request, res: Response) {
 
       fundingAccount = await FundingAccount.findOne({ where: { userId } });
       // res.json({ message: "transaction successful", data: fundingAccount?.dataValues });
-      console.log('new acct balance: ', fundingAccount?.dataValues.acctBal);
-      res.redirect('success');
+      console.log('new0 acct balance: ', fundingAccount?.dataValues.acctBal);
+      res.redirect('/account/success');
     }
 
   } catch (error: any) {

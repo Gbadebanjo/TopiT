@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { User, Transaction, FundingAccount, TransactionAttributes } from "./models"
+import { User, Transaction, FundingAccount } from "./models"
 
 export const registerValidator = Joi.object().keys({
   username: Joi.string().lowercase().required(),

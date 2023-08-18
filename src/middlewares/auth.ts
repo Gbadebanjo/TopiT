@@ -11,7 +11,7 @@ import jwt from "jsonwebtoken";
  * @param res - The response object.
  * @param next - The next function to call in the middleware chain.
  */
-export function authenticate(req: Request, res: Response, next: NextFunction) {
+export async function authenticate(req: Request, res: Response, next: NextFunction) {
   console.log('calling authenticate middleware');
   const secretKey = process.env.JWT_SECRET as string;
   const token = req.cookies.token;
@@ -19,14 +19,17 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
   if (!token) {
     console.log('No token found. Please sign up or login if you already have an account');
     return res.redirect('/');
-  }
-
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    req.userKey = decoded;
-    next();
-  } catch (error: any) {
-    res.render('error', { error, message: error.message });
+  } else {
+    try {
+      const decodedToken = jwt.verify(token, secretKey);
+      req.userKey = decodedToken;
+      const { id } = req.userKey;    
+      const userModel = await getUserById(id);
+      req.userKey.user = userModel?.dataValues;
+      next();
+    } catch (error: any) {
+      res.render('error', { error, message: error.message });
+    }
   }
 }
 
@@ -40,25 +43,24 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
  * @param next The next middleware function.
  */
 export async function authorization(req: Request, res: Response, next: NextFunction) {
-  console.log('Calling authorization middleware');
-  try {
-    const { id } = req.userKey;
-    const user = await User.findOne({
-      where: { id },
-      // include: [{ all: true }]
-    });
+  // console.log('Calling authorization middleware');
+  // try {
+  //   const { id } = req.userKey;
+  //   const user = await User.findOne({
+  //     where: { id },
+  //     // include: [{ all: true }]
+  //   });
 
-    if (!user) {
-      return res.status(401).send('Unauthorized');
-    }
+  //   if (!user) {
+  //     return res.status(401).send('Unauthorized');
+  //   }
 
-    const userModel = await getUserById(id);
-    req.userKey.user = userModel?.dataValues;
-    // req.user = user;
-    next();
-  } catch (error: any) {
-    res.render('error', { error, message: error.message });
-  }
+  //   const userModel = await getUserById(id);
+  //   req.userKey.user = userModel?.dataValues;
+  //   next();
+  // } catch (error: any) {
+  //   res.render('error', { error, message: error.message });
+  // }
 }
 
 

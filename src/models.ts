@@ -1,15 +1,15 @@
 import { DataTypes, Model } from "sequelize";
 import db from "./config/db.config";
 
-// export interface UserAttributes {
-//   id: string;
-//   username: string;
-//   email: string;
-//   password: string;
-//   fullname: string;
-//   phone: string;
-//   isAdmin: boolean;
-// }
+export interface UserAttributes {
+  id: string;
+  username: string;
+  email: string;
+  password: string;
+  fullname: string;
+  phone: string;
+  isAdmin: boolean;
+}
 export class User extends Model { };
 User.init({
   id: {

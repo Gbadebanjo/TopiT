@@ -73,14 +73,12 @@ export async function login(req: Request, res: Response) {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email }, include: [{ all: true }], });
     if (!user) {
-      console.log('no user with such email');
       return res.status(400).json({ message: "Invalid login details" });
     }
 
     // Compare the provided password with the hashed password in the database
     const isValidPassword = await bcrypt.compare(password, user.dataValues.password);
     if (!isValidPassword) {
-      console.log('invalid password')
       return res.status(400).json({ message: "Invalid login details" });
     }
 

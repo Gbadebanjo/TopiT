@@ -35,13 +35,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 
-`========================`
+//=======================================================================
 // install and use imported routers
 // app.use(url, [middlewares], [routers]) => syntax for using middlewares
 app.use("/", [indexRouter, authRouter]);
-app.use("/account", [auth.authenticate, auth.authorization], [usersRouter, userPagesRouter, transactionsRouter]);
-// app.use("/account/transaction", transactionsRouter);
-`========================`
+app.use("/account", [auth.authenticate], [usersRouter, userPagesRouter, transactionsRouter]);
+//=======================================================================
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
